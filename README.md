@@ -353,12 +353,14 @@ TI C64+ DSP loader and IPC utilities.
 
 ## 29-Sep-2013
    - changed: removed CCS projects and renamed "c64_ccs_projects/" to "dsp/".
-   - added: makefile based DSP build system. This require the following TI packages:
+   - added: makefile based DSP build system. This requires the following TI packages:
+```
              $HOME/ti/bios_5_42_01_09
              $HOME/ti/c64xplus-iqmath_2_01_04_00
              $HOME/ti/fastRTS_c62xc64x_1_42
              $HOME/ti/TI_CGT_C6000_7.4.5
              $HOME/ti/xdctools_3_25_03_72
+```
  
             In order to build the DSP libraries and .out image, change to the "dsp/" directory,
              run ". setenv.sh", then "m all" to start the build.
@@ -488,7 +490,7 @@ TI C64+ DSP loader and IPC utilities.
 
 
  The "c64_tc" test application allows to run a couple of testcases:
-
+```
    pandora:/home/bsp# ./c64_tc 
     Usage:
       c64_tc [testcase_nr]
@@ -501,12 +503,14 @@ TI C64+ DSP loader and IPC utilities.
                      05: TC_SHM_ACCESS
                      06: TC_FASTCALL_RPC_ADD
                      07: TC_SRAM_SPEED
-
+```
 
 
  Start with running the IPC (interprocessor communication) benchmark/stresstest:
 
+```
    $ ./c64_tc 3
+```
 
  The stresstest can be started multiple times, in order to test the multi-client
   feature (add an '&' to the cmdline above, then issue the command multiple times).
