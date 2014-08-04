@@ -452,9 +452,13 @@ TI C64+ DSP loader and IPC utilities.
 
  First of all, set the following shell variables:
 
+```
   $ export CROSS_COMPILE=arm-none-linux-gnueabi-
+```
 
+```
   $ export CROSS_ROOT=/bsp/pandora-dev/arm-2011.09
+```
 
      (change this to point to the target filesystem crosscompile root, which
        must contain "usr/src/pandora-kernel")
@@ -464,7 +468,9 @@ TI C64+ DSP loader and IPC utilities.
 
  Then issue
 
+```
   $ make -f makefile.linux all
+```
 
  to rebuild the sources.
 
@@ -480,10 +486,11 @@ TI C64+ DSP loader and IPC utilities.
   your user/hostname first).
 
  On the device, run "./go64.sh" to boot the DSP and load the kernel module:
-
+```
    $ sudo su
    # export C64_DEBUG=<lvl>  ; (lvl=0..30. 0 if this line is omitted)
    # ./go64.sh
+```
 
  The verbosity of the kernel module and libc64 can be controlled by setting
   the C64_DEBUG environment variable prior to running "go64".
