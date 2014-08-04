@@ -4,7 +4,7 @@ c64_tools
 TI C64+ DSP loader and IPC utilities.
 
 
-** About
+# About
 
  This package provides a couple of tools and libraries to
   support the C64+ DSP found in TI's OMAP3 hardware.
@@ -56,9 +56,9 @@ TI C64+ DSP loader and IPC utilities.
 
 
 
-** Changes
+# Changes
 
- 18-Jan-2014
+## 18-Jan-2014
    - changed DSP power on/off sequences to match those found in TI's SysLink.
 
       This seems to fix stability issues on older OMAP3530 based Pandora devices
@@ -142,7 +142,7 @@ TI C64+ DSP loader and IPC utilities.
 
 
 
- 15-Dec-2013
+## 15-Dec-2013
    - changed: the CROSS_ROOT env.var. is optional now
       (if it is not set, CROSS_KERNEL _must_ be set)
    - added support for CROSS_KERNEL env.var. to force specific kernel source directory
@@ -155,7 +155,7 @@ TI C64+ DSP loader and IPC utilities.
       (benchmarks DSP suspend/resume latency (~1.37 millisec @800Mhz, ~2.84 millisec @200Mhz))
 
 
- 13-Dec-2013
+## 13-Dec-2013
    - added c64_memview graphics example
       (a realtime memory monitor. quite useless but fun. looks best after a fresh
        reboot (unfragmented memory), e.g. load LibreOffice)
@@ -265,7 +265,7 @@ TI C64+ DSP loader and IPC utilities.
                 45: TC_QDMA_LINK2
 
 
- 02-Nov-2013
+## 02-Nov-2013
    - added pnd_src/ folder
    - added -nops cmdline option to c64_dsprite
      (executes 800 million NOPs on DSP side, can be used to calibrate the DSP clock rate)
@@ -282,7 +282,7 @@ TI C64+ DSP loader and IPC utilities.
    - added (a lot of) new c64_tc testcases (run "./c64_tc" to see a list)
 
 
- 25-Oct-2013
+## 25-Oct-2013
    - fixed: DSP build dependencies
    - changed: DSP overlays can now be compiled w/o installing DSP/BIOS
    - changed: build versioned libc64.so.1
@@ -317,7 +317,7 @@ TI C64+ DSP loader and IPC utilities.
                 23: TC_QDMA_COPY2D
 
 
- 05-Oct-2013
+## 05-Oct-2013
    - added: DSP auto suspend / resume (in suspend, DSP consumes no power).
              The DSP is automatically suspended when the last application using it quits.
              Vice versa, it resumes execution / is restarted when the next app. connects.
@@ -351,7 +351,7 @@ TI C64+ DSP loader and IPC utilities.
                did not have a negative effect on the performance
                
 
- 29-Sep-2013
+## 29-Sep-2013
    - changed: removed CCS projects and renamed "c64_ccs_projects/" to "dsp/".
    - added: makefile based DSP build system. This require the following TI packages:
              $HOME/ti/bios_5_42_01_09
@@ -369,7 +369,7 @@ TI C64+ DSP loader and IPC utilities.
    - added: DSP powersave mode. The system power consumption should now be not much
              different when the DSP is running (~0.35 W/h with the lid closed and WIFI off)
 
- 23-Sep-2013
+## 23-Sep-2013
    - added: the c64.ko kernel module now supports select() (=> OS friendly message reception)
    - added dsp_poll_enable() API function (increases message throughput by ~500% but is
       not OS friendly (high GPP usage). default=use select).
@@ -382,7 +382,7 @@ TI C64+ DSP loader and IPC utilities.
        the source also contains several other alternative (slower) implementations.)
 
 
- 20-Sep-2013
+## 20-Sep-2013
    - changed: GPP applications do not require root privileges anymore (a bug in the last release)
    - GPP applications now have access to the second half of the L1DSRAM of the DSP (24 kbytes)
       The last 16 bytes of that area are used as IPC 'registers'. See "include/dsp_common.h".
@@ -407,7 +407,7 @@ TI C64+ DSP loader and IPC utilities.
                    to use one of the "scripts/static_dsp_mem/*" boot scripts (depends on what edition you have).
 
 
- 18-Sep-2013
+## 18-Sep-2013
    - code cleanup
    - improved IPC/messaging speed by factor 1.7 (~23500 message roundtrips per second)
    - support for Linux CMA (contiguous memory allocator) (for dynamic GPP/DSP shared memory allocation)
@@ -420,12 +420,12 @@ TI C64+ DSP loader and IPC utilities.
    - this "readme.txt"
 
 
- 15-Sep-2013
+## 15-Sep-2013
    - initial release. ~13000 message roundtrips per second (~10 times faster than DspBridge)
 
 
 
-** Prerequisites
+# Prerequisites
 
  - an OMAP3530 or DM3730 based board. I am working with an Open Pandora
     (you should get one -- it has a keyboard, a WVGA touchscreen, game controls,
@@ -444,7 +444,7 @@ TI C64+ DSP loader and IPC utilities.
     (note: CCS is free (as in beer) for non-commercial/education use)
 
 
-** Compiling
+# Compiling
 
  (you can skip this part if you just want to try the precompiled binaries)
 
@@ -468,7 +468,7 @@ TI C64+ DSP loader and IPC utilities.
 
 
 
-** Usage
+# Usage
 
  Copy the binary files (precompiled ones can be found in the "bin-18Sep2013/"
   directory) to the target device.
@@ -512,7 +512,7 @@ TI C64+ DSP loader and IPC utilities.
   feature (add an '&' to the cmdline above, then issue the command multiple times).
 
 
-** Design considerations
+# Design considerations
 
  The remote procedure call interface used by "c64_tools" is very simple:
 
@@ -552,15 +552,19 @@ TI C64+ DSP loader and IPC utilities.
 
      On the ARM-side, use the following libc64 functions:
 
+```
        dsp_cache_wb()    -- write back data caches for the given range
        dsp_cache_inv()   -- invalidate data caches for the given range
        dsp_cache_wbinv() -- write back and invalidate data caches for the given range
+```
 
      On the DSP-side, use the following DSPBIOS functions:
 
+```
        BCACHE_wb()    -- write back data caches for the given range
        BCACHE_inv()   -- invalidate data caches for the given range
        BCACHE_wbInv() -- write back and invalidate data caches for the given range
+```
 
   - the DSP side can set up to 4 debug values via "mlb_debug_usr()".
 
@@ -591,13 +595,13 @@ TI C64+ DSP loader and IPC utilities.
     
      
 
-** Status
+# Status
 
  Right now this software is, although quite new, stable, as tested so far.
 
 
 
-** Known issues
+# Known issues
 
  - the DSP MMU is currently disabled before booting the DSP.
     This will may be changed in future releases, so that the GPP OS is protected
@@ -611,7 +615,7 @@ TI C64+ DSP loader and IPC utilities.
 
 
 
-** Authors
+# Authors
 
  This software was written by Bastian Spiegel. Feel free to contact me
   at "bs AT tkscript DOT de", if you have any questions or want to contribute.
@@ -619,7 +623,7 @@ TI C64+ DSP loader and IPC utilities.
  Thanks to Notaz for the platform_driver reference code (see "kmod/kmod.c").
 
 
-** Acknowledgements
+# Acknowledgements
 
  Some small portions (a few lines of code) are loosely based on Texas Instruments'
   "CMEM" kernel module, which is distributed under the terms of the GPL.
