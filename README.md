@@ -83,7 +83,7 @@ TI C64+ DSP loader and IPC utilities.
 
       The DSP will still be powered off when the kernel module is unloaded via 'rmmod'.
 
-   - changed: removed dsp_send_forced_message() call in c64_load/main.c
+   - changed: removed dsp_send_forced_message() call in [c64_load/main.c](../master/c64_load/main.c)
       (this was only needed by very early version of c64_tools)
 
    - added TC_L2SRAM_RAND_CHKSUM_* testcases (46..49) to 'c64_tc'
@@ -149,7 +149,7 @@ TI C64+ DSP loader and IPC utilities.
    - changed some debug messages to use KERN_DEBUG instead of KERN_INFO
       (cosmetic change, only relevant for real (non-X11) consoles)
    - fixed: dsp_power_notify() was not called if 'pwrlog' kmod option was set to 0 (false)
-   - changed: decreased udelay()s in kmod/dsp_c64.c
+   - changed: decreased udelay()s in [kmod/dsp_c64.c](../master/kmod/dsp_c64.c)
    - added proper DSP startup sync (wait for signal/flag from DSP instead of udelay())
    - added 'c64_pwrbench' testcase
       (benchmarks DSP suspend/resume latency (~1.37 millisec @800Mhz, ~2.84 millisec @200Mhz))
@@ -176,12 +176,12 @@ TI C64+ DSP loader and IPC utilities.
    - added qdma_link1d() syscall
    - added qdma_link2d() syscall
    - fixed sS16 typedef (now signed)
-   - refactored SRAM malloc code to minim.h/minim.c
+   - refactored SRAM malloc code to [minim.h](../master/kmod/minim.h) / [minim.c](../master/kmod/minim.c)
    - renamed dsp_fshm_*() to dsp_l1sram_*() (old calls are marked deprecated)
    - added dsp_physgpp_to_physdsp() API function (L3 to local interconnect addr. translation)
-   - added C64_IOCTL_L2SRAM_ALLOC to c64_dev.h
-   - added C64_IOCTL_L2SRAM_FREE to c64_dev.h
-   - added C64_IOCTL_L2SRAM_DEBUG to c64_dev.h
+   - added C64_IOCTL_L2SRAM_ALLOC to [c64_dev.h](../master/include/c64_dev.h)
+   - added C64_IOCTL_L2SRAM_FREE to [c64_dev.h](../master/include/c64_dev.h)
+   - added C64_IOCTL_L2SRAM_DEBUG to [c64_dev.h](../master/include/c64_dev.h)
    - added dsp_l2sram_alloc() API function
    - added dsp_l2sram_free() API function
    - added dsp_l2sram_debug() (private) API function
@@ -190,18 +190,18 @@ TI C64+ DSP loader and IPC utilities.
    - added CMD_LINK2D to 'test_qdma' DSP component
    - added new c64_tc testcase TC_QDMA_LINK1D
    - added new c64_tc testcase TC_QDMA_LINK2D
-   - added DSP_MAILBOX_RESET compile time option to dsp_config.h
-   - added C64_TOOLS_ROOT env.var. export to dsp/setenv.sh (for DSP out of tree builds)
+   - added DSP_MAILBOX_RESET compile time option to [dsp_config.h](../master/include/dsp_config.h)
+   - added C64_TOOLS_ROOT env.var. export to [dsp/setenv.sh](../master/dsp/setenv.sh) (for DSP out of tree builds)
    - added setenv.sh (for GPP out of tree builds)
    - moved GPP graphics examples from tests/ to gfx_tests/
    - moved DSP graphics components from dsp/components/ to gfx_tests/dsp/components/
-   - moved dsp_component_id_find_by_name() to dsp_priv.h
+   - moved dsp_component_id_find_by_name() to [dsp_priv.h](../master/include/dsp_priv.h)
    - fixed multiprocess sync. in dsp_component_load()
    - added CORE_FC_CMD_COM_OVERLAY_FIND fastcall to core DSP component
    - added some cache writeback calls to fix sporadic DSP side component (un-)registration issue
    - added dsp_resume() API function
-   - deprecated dsp_power_off() (dsp_priv.h) function (falls back to dsp_suspend())
-   - moved dsp_resume() to public header file (dsp.h)
+   - deprecated dsp_power_off() ([dsp_priv.h](../master/include/dsp_priv.h)) function (falls back to dsp_suspend())
+   - moved dsp_resume() to public header file ([dsp.h](../master/include/dsp.h))
    - fixed DSP resume which was essentially broken due to some forgotten test/debug code
       (registered components were lost during dsp_resume())
    - increased RPC timeouts
@@ -273,10 +273,10 @@ TI C64+ DSP loader and IPC utilities.
    - added dsp_cache_inv_virt() API function
    - added dsp_cache_wb_virt() API function
    - added dsp_cache_wbinv_virt() API function
-   - added USE_DSP_POWER_NOTIFY build option to kmod.h
+   - added USE_DSP_POWER_NOTIFY build option to [kmod.h](../master/kmod/kmod.h)
       (if defined, call dsp_power_notify() before/after DSP is resumed/suspended)
-   - added USE_FORCED_LOWPOWER_BYPASS build option to kmod.h
-   - fixed: kmod/dev.c cache actions (inv/wb/wbinv) now use customized versions of
+   - added USE_FORCED_LOWPOWER_BYPASS build option to [kmod.h](../master/kmod/kmod.h)
+   - fixed: [kmod/dev.c](../master/kmod/dev.c) cache actions (inv/wb/wbinv) now use customized versions of
       v7_dma_map_area() instead of falling back to (the slow) cache_flush_all()
    - added support for huge pages (DSP_CACHE_HUGETLB cache type)
    - added (a lot of) new c64_tc testcases (run "./c64_tc" to see a list)
@@ -293,7 +293,7 @@ TI C64+ DSP loader and IPC utilities.
              The allocation granularity is 64 bytes (one cacheline).
    - added: malloc()/free() like memory allocator for e.g. shared memory. Uses Doug Lea's "dl_malloc".
              New API functions: dsp_mspace_create()/malloc()/memalign()/free()/destroy()
-   - fixed: terminate fastcall-sequence in kmod/dev.c in case client forgot to
+   - fixed: terminate fastcall-sequence in [kmod/dev.c](../master/kmod/dev.c) in case client forgot to
    - fixed: multiprocess overlay load race condition
    - added: dsp_virt_to_phys() and dsp_phys_to_virt() API calls
    - added: dsp_cache_wbinvall() API call
@@ -301,7 +301,8 @@ TI C64+ DSP loader and IPC utilities.
    - added: new DSP syscalls qdma_init()/wait()/copy1d()/copy2d()
    - added: new DSP example components test_logbuf, test_qdma, dsprite
    - added: new GPP examples "c64_minimal" and "c64_dsprite"
-   - added: new "tests/c64_tc.c" testcases:
+   - added: new [tests/c64_tc.c](../master/tests/c64_tc.c) testcases:
+```
                 11: TC_SHM_CACHE_NONE
                 12: TC_SHM_CACHE_RW
                 13: TC_SHM_CACHE_R
@@ -315,7 +316,7 @@ TI C64+ DSP loader and IPC utilities.
                 21: TC_LOGBUF_NO_LF
                 22: TC_QDMA_COPY1D
                 23: TC_QDMA_COPY2D
-
+```
 
 ## 05-Oct-2013
    - added: DSP auto suspend / resume (in suspend, DSP consumes no power).
@@ -335,14 +336,16 @@ TI C64+ DSP loader and IPC utilities.
              cache management utilities, and mem/string handling functions.
    - changed: DSP components no longer require DSP/BIOS (=> considerable decrease in code size)
                For DSP component development, the following (free as in beer) TI packages are required:
+```
                 $HOME/ti/c64xplus-iqmath_2_01_04_00
                 $HOME/ti/fastRTS_c62xc64x_1_42
                 $HOME/ti/TI_CGT_C6000_7.4.5
+```
    - changed: cleaned up DSP build system and moved common .mk code into include files
-   - changed: cleaned up "core" tconf and split it into multiple .tcis (see dsp/tci/ folder).
+   - changed: cleaned up "core" tconf and split it into multiple .tcis (see [dsp/tci/](../master/dsp/tci/) folder).
                "config.tci" is the central memory configuration file.
-               It is included by the new gen_link_areas.tks script, which generates the DSP linker
-                command files (.cmd) and the "overlay_sections.c" source, which is also included
+               It is included by the new [gen_link_areas.tks](../master/dsp/linker_scripts/gen_link_area.tks) script, which generates the DSP linker
+                command files (.cmd) and the [overlay_sections.c](../master/dsp/linker_scripts/overlay_sections.c) source, which is also included
                 by the GPP-side build.
                Unless you want to change the memory layout, you do not need to worry about this, though.
    - fixed: added mtx_clients mutex to kernel module to fix some (potential) multiprocess concurrency issues
@@ -393,8 +396,8 @@ TI C64+ DSP loader and IPC utilities.
    - added dsp_rpc_send() and dsp_rpc_recv() (so that applications can do something else while
       the DSP is busy)
    - added new DSP "dsp_calc_fastcall" demo component that shows how to implement fastcall RPCs
-   - added testcase #6 to "tests/c64_tc.c" (fastcall RPC example)
-   - added testcase #7 to "tests/c64_tc.c" (SRAM access benchmark (=> ~3.89 million 32bit reads/writes per second)
+   - added testcase #6 to [tests/c64_tc.c](../master/tests/c64_tc.c) (fastcall RPC example)
+   - added testcase #7 to [tests/c64_tc.c](../master/tests/c64_tc.c) (SRAM access benchmark (=> ~3.89 million 32bit reads/writes per second)
    - the "c64.ko" kernel module now allocates the DSP image area (fixed address) during init.
       this means that it is no longer necessary to statically reserve memory for the DSP at boottime.
       (thanks to Notaz for providing a new Linux kernel and a small example module !)
@@ -402,11 +405,11 @@ TI C64+ DSP loader and IPC utilities.
       ** NOTE **  You need the updated kernel (see "pandora_sz1.55_kernel_update/uImage-3", copy it to "/boot" on the Pandora)
                    for the kernel module binary to work.
 
-                  Please use the "scripts/cma_dsp_mem/autoboot.txt" boot script (works on all Pandora editions).
+                  Please use the [scripts/cma_dsp_mem/autoboot.txt](../master/scripts/cma_dsp_mem/autoboot.txt) boot script (works on all Pandora editions).
 
                   In case you do not want to update your kernel for some reason, you have to undefine
-                   "USE_PLATFORM_DRIVER" in "kmod/kmod.c" and rebuild the module. You will also need
-                   to use one of the "scripts/static_dsp_mem/*" boot scripts (depends on what edition you have).
+                   "USE_PLATFORM_DRIVER" in [kmod/kmod.c](../master/kmod/kmod.c) and rebuild the module. You will also need
+                   to use one of the [scripts/static_dsp_mem/*](../master/scripts/static_dsp_mem/) boot scripts (depends on what edition you have).
 
 
 ## 18-Sep-2013
@@ -542,9 +545,9 @@ TI C64+ DSP loader and IPC utilities.
       function, 0=success)
 
    - The components used by a specific DSP image are enumerated in
-      the file "components.h", located in the DSP project directory.
+      the file [components.h](../master/dsp/core/components.h), located in the DSP project directory.
 
-   - The GPP-side includes "components.h" so it can use the component
+   - The GPP-side includes [components.h](../master/dsp/core/components.h) so it can use the component
       IDs in remote procedure calls.
 
 
