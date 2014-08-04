@@ -376,7 +376,7 @@ TI C64+ DSP loader and IPC utilities.
    - added dsp_poll_enable() API function (increases message throughput by ~500% but is
       not OS friendly (high GPP usage). default=use select).
    - the dsp_cache_inv() and dsp_cache_wbinv() now fall back to flush_cache_all() since all
-      other functions (see "kmod/dev.c") cause system instabilities. disabling interrupts
+      other functions (see [kmod/dev.c](../master/kmod/dev.c)) cause system instabilities. disabling interrupts
       during cache invalidates did not change that.
    - added "tests/omapfb.c" utility code for framebuffer access on OMAP3 / Open Pandora.
    - added "c64_fractal" GPP example and "demo_fractal" component on DSP-side.
@@ -387,7 +387,7 @@ TI C64+ DSP loader and IPC utilities.
 ## 20-Sep-2013
    - changed: GPP applications do not require root privileges anymore (a bug in the last release)
    - GPP applications now have access to the second half of the L1DSRAM of the DSP (24 kbytes)
-      The last 16 bytes of that area are used as IPC 'registers'. See "include/dsp_common.h".
+      The last 16 bytes of that area are used as IPC 'registers'. See [include/dsp_common.h](../master/include/dsp_common.h).
    - added dsp_fastcall_rpc() (can be called after the DSP has initiated a fastcall sequence)
    - added dsp_fastcall_end() (must be called to finish the fastcall sequence)
    - added dsp_rpc_send() and dsp_rpc_recv() (so that applications can do something else while
@@ -414,7 +414,7 @@ TI C64+ DSP loader and IPC utilities.
    - improved IPC/messaging speed by factor 1.7 (~23500 message roundtrips per second)
    - support for Linux CMA (contiguous memory allocator) (for dynamic GPP/DSP shared memory allocation)
    - GPP-side cache utility functions (writeback/invalidate/writeback+invalidate)
-   - lots of new API functions (see "include/dsp.h")
+   - lots of new API functions (see [include/dsp.h](../master/include/dsp.h))
    - added Pandora "autoboot.txt" boot scripts to scripts/
       (use autoboot.txt__CLASSIC for Pandoras with 256 MBytes RAM, rename to autoboot.txt before copying
        to left SDCard)
@@ -631,7 +631,7 @@ TI C64+ DSP loader and IPC utilities.
  This software was written by Bastian Spiegel. Feel free to contact me
   at "bs AT tkscript DOT de", if you have any questions or want to contribute.
 
- Thanks to Notaz for the platform_driver reference code (see "kmod/kmod.c").
+ Thanks to Notaz for the platform_driver reference code (see [kmod/kmod.c](../master/kmod/kmod.c)).
 
 
 # Acknowledgements
