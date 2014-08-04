@@ -1,0 +1,85 @@
+pandora:/home/bsp# ./reg_write 48004040 00080a00
+    read reg[0x48004040] = 0x00081600 (0000 0000 0000 1000 0001 0110 0000 0000)
+   write reg[0x48004040] = 0x00080a00
+ re-read reg[0x48004040] = 0x00080a00 (0000 0000 0000 1000 0000 1010 0000 0000)
+
+pandora:/home/bsp# ./c64_fractal_dsponly 
+[...] omapfb_plane_enable: ok, plane 0 is now disabled.
+[...] loc_setup_fb1: ok, plane 1 is now disabled.
+[...] omapfb_plane_setup: OK, plane 1 is configured size=(128; 128) geo=(0; 0; 800; 480) bpp=32.
+[...] omapfb_plane_setup_dsp_mem: plane 1 virt_addr=0x41293000, phys_addr=0x9c050000 size=0x00010000.
+[...] omapfb_init: OK.
+[...] 3600 iterations in 32118 millisecs.
+[...] omapfb_plane_enable: ok, plane 1 is now disabled.
+[dbg] omapfb_exit: [1] unmapped 65536 bytes @virt=0x41293000 (phys=0x9c050000).
+[...] omapfb_plane_enable: ok, plane 0 is now enabled.
+
+
+  ==> DSP at half speed (400Mhz on 1Ghz Pandora (DM3730), 215 MHz on the others (?!))
+
+
+
+
+
+pandora:/home/bsp# ./reg_write 48004040 00081400  
+    read reg[0x48004040] = 0x00080a00 (0000 0000 0000 1000 0000 1010 0000 0000)
+   write reg[0x48004040] = 0x00081400
+ re-read reg[0x48004040] = 0x00081400 (0000 0000 0000 1000 0001 0100 0000 0000)
+
+pandora:/home/bsp# ./c64_fractal_dsponly 
+[...] omapfb_plane_enable: ok, plane 0 is now disabled.
+[...] loc_setup_fb1: ok, plane 1 is now disabled.
+[...] omapfb_plane_setup: OK, plane 1 is configured size=(128; 128) geo=(0; 0; 800; 480) bpp=32.
+[...] omapfb_plane_setup_dsp_mem: plane 1 virt_addr=0x41132000, phys_addr=0x9c050000 size=0x00010000.
+[...] omapfb_init: OK.
+[...] 3600 iterations in 16263 millisecs.
+[...] omapfb_plane_enable: ok, plane 1 is now disabled.
+[dbg] omapfb_exit: [1] unmapped 65536 bytes @virt=0x41132000 (phys=0x9c050000).
+[...] omapfb_plane_enable: ok, plane 0 is now enabled.
+
+ ==> DSP at default speed (800Mhz on 1Ghz Pandora (DM3730), 430 MHz on the others (?!))
+
+
+
+
+
+pandora:/home/bsp# ./reg_write 48004040 00081600
+    read reg[0x48004040] = 0x00081400 (0000 0000 0000 1000 0001 0100 0000 0000)
+   write reg[0x48004040] = 0x00081600
+ re-read reg[0x48004040] = 0x00081600 (0000 0000 0000 1000 0001 0110 0000 0000)
+
+ ==> DSP overclocked to 880Mhz (473 Mhz)
+
+pandora:/home/bsp# ./c64_fractal_dsponly 
+[...] omapfb_plane_enable: ok, plane 0 is now disabled.
+[...] loc_setup_fb1: ok, plane 1 is now disabled.
+[...] omapfb_plane_setup: OK, plane 1 is configured size=(128; 128) geo=(0; 0; 800; 480) bpp=32.
+[...] omapfb_plane_setup_dsp_mem: plane 1 virt_addr=0x4125c000, phys_addr=0x9c050000 size=0x00010000.
+[...] omapfb_init: OK.
+[...] 3600 iterations in 14780 millisecs.
+[...] omapfb_plane_enable: ok, plane 1 is now disabled.
+[dbg] omapfb_exit: [1] unmapped 65536 bytes @virt=0x4125c000 (phys=0x9c050000).
+[...] omapfb_plane_enable: ok, plane 0 is now enabled.
+
+
+so yes, overclocking works. Have not dared to go higher than 10%, yet :)
+
+
+
+pandora:/home/bsp# ./reg_write 48004040 00081800 
+    read reg[0x48004040] = 0x00081400 (0000 0000 0000 1000 0001 0100 0000 0000)
+   write reg[0x48004040] = 0x00081800
+ re-read reg[0x48004040] = 0x00081800 (0000 0000 0000 1000 0001 1000 0000 0000)
+pandora:/home/bsp# ./c64_fractal_dsponly 
+[...] omapfb_plane_enable: ok, plane 0 is now disabled.
+[...] loc_setup_fb1: ok, plane 1 is now disabled.
+[...] omapfb_plane_setup: OK, plane 1 is configured size=(128; 128) geo=(0; 0; 800; 480) bpp=32.
+[...] omapfb_plane_setup_dsp_mem: plane 1 virt_addr=0x401c9000, phys_addr=0x9c050000 size=0x00010000.
+[...] omapfb_init: OK.
+[...] 3600 iterations in 13572 millisecs.
+[...] omapfb_plane_enable: ok, plane 1 is now disabled.
+[dbg] omapfb_exit: [1] unmapped 65536 bytes @virt=0x401c9000 (phys=0x9c050000).
+[...] omapfb_plane_enable: ok, plane 0 is now enabled.
+
+
+ ==> DSP overclocked to 960Mhz

@@ -1,0 +1,131 @@
+#
+# toplevel makefile for "c64_tools" package (DSP-side)
+#
+
+include install.mk
+include ../scp.mk
+
+
+# rebuild all
+.PHONY: all
+all: 
+	$(MAKE) -f $(MAKEFILE) clean && $(MAKE) -f $(MAKEFILE) bin
+
+
+# build all
+.PHONY: bin
+bin: core_bin overlays_bin libc64_bin
+
+# clean all
+.PHONY: clean
+clean: core_clean overlays_clean libc64_clean
+
+
+# build/clean overlays
+.PHONY: overlays_bin
+overlays_bin: demo_calc_bin demo_checksum_bin demo_calc_fastcall_bin test_logbuf_bin test_qdma_bin nops_bin sramtest_bin
+
+.PHONY: overlays_clean
+overlays_clean: demo_calc_clean demo_checksum_clean demo_calc_fastcall_clean test_logbuf_clean test_qdma_clean nops_clean sramtest_clean
+
+.PHONY: overlays
+overlays:
+	$(MAKE) -f $(MAKEFILE) overlays_clean && $(MAKE) -f $(MAKEFILE) overlays_bin
+
+
+# build/clean core DSP image
+.PHONY: core_bin
+core_bin: libc64_bin
+	$(MAKE) -C core -f $(MAKEFILE) bin
+
+.PHONY: core_clean
+core_clean:
+	$(MAKE) -C core -f $(MAKEFILE) clean
+
+
+# build/clean "demo_calc" example area2 overlay component
+.PHONY: demo_calc_bin
+demo_calc_bin:
+	$(MAKE) -C components/demo_calc -f $(MAKEFILE) bin
+
+.PHONY: demo_calc_clean
+demo_calc_clean:
+	$(MAKE) -C components/demo_calc -f $(MAKEFILE) clean
+
+
+# build/clean "demo_checksum" example area2 overlay component
+.PHONY: demo_checksum_bin
+demo_checksum_bin:
+	$(MAKE) -C components/demo_checksum -f $(MAKEFILE) bin
+
+.PHONY: demo_checksum_clean
+demo_checksum_clean:
+	$(MAKE) -C components/demo_checksum -f $(MAKEFILE) clean
+
+
+# build/clean "demo_calc_fastcall" example area2 overlay component
+.PHONY: demo_calc_fastcall_bin
+demo_calc_fastcall_bin:
+	$(MAKE) -C components/demo_calc_fastcall -f $(MAKEFILE) bin
+
+.PHONY: demo_calc_fastcall_clean
+demo_calc_fastcall_clean:
+	$(MAKE) -C components/demo_calc_fastcall -f $(MAKEFILE) clean
+
+
+# build/clean "test_logbuf" example area2 overlay component
+.PHONY: test_logbuf_bin
+test_logbuf_bin:
+	$(MAKE) -C components/test_logbuf -f $(MAKEFILE) bin
+
+.PHONY: test_logbuf_clean
+test_logbuf_clean:
+	$(MAKE) -C components/test_logbuf -f $(MAKEFILE) clean
+
+
+# build/clean "test_qdma" example area2 overlay component
+.PHONY: test_qdma_bin
+test_qdma_bin:
+	$(MAKE) -C components/test_qdma -f $(MAKEFILE) bin
+
+.PHONY: test_qdma_clean
+test_qdma_clean:
+	$(MAKE) -C components/test_qdma -f $(MAKEFILE) clean
+
+
+# build/clean "nops" example area2 overlay component
+.PHONY: nops_bin
+nops_bin:
+	$(MAKE) -C components/nops -f $(MAKEFILE) bin
+
+.PHONY: nops_clean
+nops_clean:
+	$(MAKE) -C components/nops -f $(MAKEFILE) clean
+
+
+# build/clean "sramtest" example area2 overlay component
+.PHONY: sramtest_bin
+sramtest_bin:
+	$(MAKE) -C components/sramtest -f $(MAKEFILE) bin
+
+.PHONY: sramtest_clean
+sramtest_clean:
+	$(MAKE) -C components/sramtest -f $(MAKEFILE) clean
+
+
+# build/clean "libc64.lib" static library
+.PHONY: libc64_bin
+libc64_bin:
+	$(MAKE) -C libc64_dsp -f $(MAKEFILE) bin
+
+.PHONY: libc64_clean
+libc64_clean:
+	$(MAKE) -C libc64_dsp -f $(MAKEFILE) clean
+
+.PHONY: scp
+scp: bin
+	scp \
+		core/core.out \
+		core/core.map \
+		`find components/ -name \*.out` \
+		$(SCP_USER)@$(SCP_HOST):$(SCP_PATH)

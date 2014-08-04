@@ -1,7 +1,7 @@
 c64_tools
-=========
+---------
 
-TI C64+ DSP loader and IPC utilities.
+ Released on: January 18th, 2014.
 
 
 ** About
@@ -635,3 +635,10 @@ TI C64+ DSP loader and IPC utilities.
   It's not a verbatim copy but looking at the DspLink source saved me some time
    I otherwise would have needed for finding out the hex-values for the
    branch instruction.
+
+
+** Greetings
+
+ To everyone who's reading this. Also to Nico and Nils (the C64+ assembly masters),
+  Manfred&Manfred, and Mahmut @TI (plus a few others, I do not have their names at
+  hand right now and it's been a couple of years ;)

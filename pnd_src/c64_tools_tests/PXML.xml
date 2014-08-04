@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PXML xmlns="http://openpandora.org/namespaces/PXML">
+  <package id="c64_tools_tests">
+    <version major="1" minor="0" release="0" build="2"/>
+    <author name="bsp" email="bs@tkscript.de"/>        
+<!--
+    <title lang="en_US">c64_tools (DSP) testcases + examples</title>
+-->
+    <titles>
+      <title lang="en_US">c64_tools (DSP) testcases + examples</title>
+    </titles>
+<!--
+    <description>
+      <en>c64_tools (DSP) testcases + examples</en>
+    </description>
+-->
+<!--
+    <description lang="en_US">c64_tools (DSP) testcases + examples</description>
+-->
+    <descriptions>
+      <description lang="en_US">c64_tools (DSP) testcases + examples</description>
+    </descriptions>
+  </package>
+
+
+  <!-- c64_tc -->
+  <application id="c64_tc">
+    <title lang="en_US">dsp: Open c64_tools testcases shell</title>
+    <titles>
+      <title lang="en_US">dsp: Open c64_tools testcases shell</title>
+    </titles>
+    <description lang="en_US">c64_tc shell</description>
+    <descriptions>
+      <description lang="en_US">c64_tc shell</description>
+    </descriptions>
+    <version major="1" minor="0" release="0" build="1"/>
+    <osversion major="3" minor="2" release="52" build="919"/>
+    <exec command="shell64.sh" arguments="c64_tc c64_tc"/>
+    <author name="bsp" email="bs@tkscript.de"/>
+    <licenses>
+      <license name="GPL"/>
+    </licenses>
+    <categories>
+      <category name="AudioVideo">
+<!--
+        <subcategory name="Presentation"/>
+-->
+      </category>
+    </categories>
+  </application>
+
+
+
+  <!-- c64_fractal_dspgpp -->
+  <application id="c64_fractal_dspgpp">
+    <title lang="en_US">dsp: c64_fractal_dspgpp</title>
+    <titles>
+      <title lang="en_US">dsp: c64_fractal_dspgpp</title>
+    </titles>
+    <description lang="en_US">Julia attractor fractal (DSP+GPP)</description>
+    <descriptions>
+      <description lang="en_US">Julia attractor fractal (DSP+GPP)</description>
+    </descriptions>
+    <version major="1" minor="0" release="0" build="1"/>
+    <osversion major="3" minor="2" release="52" build="919"/>
+    <exec command="run64.sh" arguments="c64_fractal_gppdsp c64_fractal_gppdsp"/>
+    <author name="bsp" email="bs@tkscript.de"/>
+    <licenses>
+      <license name="GPL"/>
+    </licenses>
+    <categories>
+      <category name="AudioVideo">
+<!--
+        <subcategory name="Presentation"/>
+-->
+      </category>
+    </categories>
+  </application>
+
+
+  <!-- c64_fractal_dsponly -->
+  <application id="c64_fractal_dsponly">
+    <title lang="en_US">dsp: c64_fractal_dsponly</title>
+    <titles>
+      <title lang="en_US">dsp: c64_fractal_dsponly</title>
+    </titles>
+    <description lang="en_US">Julia attractor fractal (DSP only)</description>
+    <descriptions>
+      <description lang="en_US">Julia attractor fractal (DSP only)</description>
+    </descriptions>
+    <version major="1" minor="0" release="0" build="1"/>
+    <osversion major="3" minor="2" release="52" build="919"/>
+    <exec command="run64.sh" arguments="c64_fractal_dsponly c64_fractal_dsponly"/>
+    <author name="bsp" email="bs@tkscript.de"/>
+    <licenses>
+      <license name="GPL"/>
+    </licenses>
+    <categories>
+      <category name="AudioVideo">
+<!--
+        <subcategory name="Presentation"/>
+-->
+      </category>
+    </categories>
+  </application>
+
+
+  <!-- c64_fractal_gpponly -->
+  <application id="c64_fractal_gpponly">
+    <title lang="en_US">dsp: c64_fractal_gpponly</title>
+    <titles>
+      <title lang="en_US">dsp: c64_fractal_gpponly</title>
+    </titles>
+    <description lang="en_US">Julia attractor fractal (GPP only / FixedPoint)</description>
+    <descriptions>
+      <description lang="en_US">Julia attractor fractal (GPP only / FixedPoint)</description>
+    </descriptions>
+    <version major="1" minor="0" release="0" build="1"/>
+    <exec command="run64.sh" arguments="c64_fractal_gpponly c64_fractal_gpponly"/>
+    <author name="bsp" email="bs@tkscript.de"/>
+    <licenses>
+      <license name="GPL"/>
+    </licenses>
+    <categories>
+      <category name="AudioVideo">
+<!--
+        <subcategory name="Presentation"/>
+-->
+      </category>
+    </categories>
+  </application>
+
+
+  <!-- c64_dsprite -->
+  <application id="c64_dsprite_default">
+    <title lang="en_US">dsp: c64_dsprite (256 32x32 ARGB32 sprites, premul. srcover blending)</title>
+    <titles>
+      <title lang="en_US">dsp: c64_dsprite (256 32x32 ARGB32 sprites, premul. srcover blending)</title>
+    </titles>
+    <description lang="en_US">c64_dsprite (256 32x32 ARGB32 sprites, premul. srcover blending)</description>
+    <descriptions>
+      <description lang="en_US">c64_dsprite (256 32x32 ARGB32 sprites, premul. srcover blending)</description>
+    </descriptions>
+    <version major="1" minor="0" release="0" build="1"/>
+    <osversion major="3" minor="2" release="52" build="919"/>
+    <exec command="run64.sh" arguments="c64_dsprite_default c64_dsprite"/>
+    <author name="bsp" email="bs@tkscript.de"/>
+    <licenses>
+      <license name="GPL"/>
+    </licenses>
+    <categories>
+      <category name="AudioVideo">
+<!--
+        <subcategory name="Presentation"/>
+-->
+      </category>
+    </categories>
+  </application>
+
+
+  <!-- c64_dsprite_alphatest0 -->
+  <application id="c64_dsprite_alphatest0">
+    <title lang="en_US">dsp: c64_dsprite (1500 32x32 ARGB32 sprites, alphatesting)</title>
+    <titles>
+      <title lang="en_US">dsp: c64_dsprite (1500 32x32 ARGB32 sprites, alphatesting)</title>
+    </titles>
+    <description lang="en_US">c64_dsprite (1500 32x32 ARGB32 sprites, alphatesting)</description>
+    <descriptions>
+      <description lang="en_US">c64_dsprite (1500 32x32 ARGB32 sprites, alphatesting)</description>
+    </descriptions>
+    <version major="1" minor="0" release="0" build="1"/>
+    <osversion major="3" minor="2" release="52" build="919"/>
+    <exec command="run64.sh" arguments="c64_dsprite_alphatest0 c64_dsprite 1 1500 1 500 1.0 1 0"/>
+    <author name="bsp" email="bs@tkscript.de"/>
+    <licenses>
+      <license name="GPL"/>
+    </licenses>
+    <categories>
+      <category name="AudioVideo">
+<!--
+        <subcategory name="Presentation"/>
+-->
+      </category>
+    </categories>
+  </application>
+
+
+  <!-- c64_dsprite_bullethell -->
+  <application id="c64_dsprite_bullethell">
+    <title lang="en_US">dsp: c64_dsprite (4000 8x8 ARGB32 sprites, alphatesting)</title>
+    <titles>
+      <title lang="en_US">dsp: c64_dsprite (4000 8x8 ARGB32 sprites, alphatesting)</title>
+    </titles>
+    <description lang="en_US">c64_dsprite (4000 8x8 ARGB32 sprites, alphatesting)</description>
+    <descriptions>
+      <description lang="en_US">c64_dsprite (4000 8x8 ARGB32 sprites, alphatesting)</description>
+    </descriptions>
+    <version major="1" minor="0" release="0" build="1"/>
+    <osversion major="3" minor="2" release="52" build="919"/>
+    <exec command="run64.sh" arguments="c64_dsprite_bullethell c64_dsprite 1 4000 1 500 1.0 1 1"/>
+    <author name="bsp" email="bs@tkscript.de"/>
+    <licenses>
+      <license name="GPL"/>
+    </licenses>
+    <categories>
+      <category name="AudioVideo">
+<!--
+        <subcategory name="Presentation"/>
+-->
+      </category>
+    </categories>
+  </application>
+
+
+  <!-- c64_dsprite_bullethell_cc -->
+  <application id="c64_dsprite_bullethell_cc">
+    <title lang="en_US">dsp: c64_dsprite [CC] (2000 8x8 ARGB32 sprites, alphatesting)</title>
+    <titles>
+      <title lang="en_US">dsp: c64_dsprite [CC] (2000 8x8 ARGB32 sprites, alphatesting)</title>
+    </titles>
+    <description lang="en_US">c64_dsprite [CC] (2000 8x8 ARGB32 sprites, alphatesting)</description>
+    <descriptions>
+      <description lang="en_US">c64_dsprite [CC] (2000 8x8 ARGB32 sprites, alphatesting)</description>
+    </descriptions>
+    <version major="1" minor="0" release="0" build="1"/>
+    <osversion major="3" minor="2" release="52" build="919"/>
+    <exec command="run64.sh" arguments="c64_dsprite_bullethell_cc c64_dsprite 1 2000 1 500 1.0 1 1"/>
+    <author name="bsp" email="bs@tkscript.de"/>
+    <licenses>
+      <license name="GPL"/>
+    </licenses>
+    <categories>
+      <category name="AudioVideo">
+<!--
+        <subcategory name="Presentation"/>
+-->
+      </category>
+    </categories>
+  </application>
+
+</PXML>

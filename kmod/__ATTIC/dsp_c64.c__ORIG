@@ -1,0 +1,617 @@
+/* ----
+ * ---- file   : dsp_c64.c
+ * ---- author : Bastian Spiegel <bs@tkscript.de>
+ * ---- legal  : (c) 2013-2014 by Bastian Spiegel. 
+ * ----          Distributed under terms of the GNU GENERAL PUBLIC LICENSE (GPL). See 
+ * ----          http://www.gnu.org/licenses/licenses.html#GPL or COPYING for further information.
+ * ----
+ * ---- info   : C64 kernel module. This is part of the "c64_tools" package.
+ * ----
+ * ---- changed: 06Sep2013, 08Sep2013, 10Sep2013, 11Sep2013, 15Sep2013, 28Sep2013, 29Sep2013
+ * ----          02Oct2013, 03Oct2013, 04Oct2013, 13Oct2013, 27Oct2013, 29Oct2013, 13Dec2013
+ * ----          15Dec2013, 14Jan2014
+ * ----
+ * ----
+ */
+
+#define __NO_VERSION__
+
+#include <linux/kernel.h>
+#include <linux/init.h>
+#include <linux/io.h>
+#include <linux/interrupt.h>
+#include <linux/delay.h>
+
+#include "../include/types.h"
+
+#define C64_KBUILD defined
+#include "../include/dsp_common.h"
+#include "../include/dsp_config.h"
+#include "../include/msg.h"
+
+#include "../include/arch/dm3730/dm3730.h"
+
+#include "kmod.h"
+#include "reg.h"
+#include "mlb.h"
+#include "dev.h"
+#include "dsp_c64.h"
+
+
+enum {
+   ST_OFF     = 0, /* powered off */
+   ST_RESET   = 1, /* powered on but in reset */
+   ST_RUNNING = 2, /* powered on / running */
+
+   __NUM_STATES__
+};
+
+
+/*--------------------------------------------------------------------------- module vars */
+static atomic_t at_dsp_state = ATOMIC_INIT(ST_OFF);
+
+static sU32 dsp_entry_point = 0;
+
+static DEFINE_SPINLOCK(dsp_spinlock);
+
+
+/*--------------------------------------------------------------------------- dsp_poweron_and_reset() */
+int dsp_poweron_and_reset(void) {
+   int ret;
+   int dspState;
+
+   dspState = atomic_read(&at_dsp_state);
+
+   if(ST_OFF == dspState)
+   {
+      unsigned long intFlags;
+
+#ifdef USE_DSP_POWER_NOTIFY
+      /* Notify kernel that DSP is about to be powered on */
+      dsp_power_notify(S_TRUE/*1*/);
+#endif /* USE_DSP_POWER_NOTIFY */
+
+      /* Disable interrupts */
+      spin_lock_irqsave(&dsp_spinlock, intFlags);
+
+      /* Disable GPTIMER5 functional clock (EN_GPT5) (DSPBIOS timer) */
+#if 0
+      reg32_bit_clear(IVA2_PER_CM_FCLKEN, 6);
+#endif
+      
+      /* Disable GPTIMER5 interface clock (EN_GPT5) */
+#if 0
+      reg32_bit_clear(IVA2_PER_CM_ICLKEN, 6);
+#endif
+      
+      /* Disable automatic transition (clear bit 0, bits 1..31 are reserved) */
+      reg32_write(IVA2_CM_CLKSTCTRL, 0);
+
+#if 0
+      /* Disable IVA2_CLK (clear bit 0, bits 1..31 are reserved) */
+      printk(KERN_DEBUG "xxx c64::dsp_poweron_and_reset: IVA2_CM_FCLKEN=0x%08x\n", reg32_read(IVA2_CM_FCLKEN));
+      ////reg32_write(IVA2_CM_FCLKEN, 0);
+      dev_iva2_clk_set_enable(S_FALSE);
+#endif
+      
+      /* Reset DSP (RST1 bit) (do NOT reset MMU or the GPP OS will freeze!!) */
+      reg32_write(IVA2_PRM_RSTCTRL, 1);
+      //reg32_write(IVA2_PRM_RSTCTRL, 5);
+      ///reg32_bit_set(IVA2_PRM_RSTCTRL, 0);
+
+      /* Allow over/underclocking. */
+#ifndef USE_FORCED_LOWPOWER_BYPASS
+      reg32_write(IVA2_CM_CLKEN_PLL, (1u<<4) | 7u);
+#endif /* USE_FORCED_LOWPOWER_BYPASS */
+      
+
+      /* Enable IVA2_CLK (set bit 1, bits 1..31 are reserved) */
+      ////reg32_write(IVA2_CM_FCLKEN, 1);
+      dev_iva2_clk_set_enable(S_TRUE);
+
+      {
+#if 0
+         if(C64_DEBUG_LEVEL(10))
+         {
+            printk(KERN_DEBUG "c64: disabling IVA2_MMU2..\n");
+         }
+#endif
+
+#if 0
+         /* (note) 5d000044 reads 0x00000000 */
+         printk(KERN_DEBUG "c64: MMU2_CNTL=0x%08x\n", reg32_read(IVA2_MMU2_CNTL));
+#endif
+         
+#if 0
+         /* Disable MMU */
+         /*  (note) apparently the default state of the MMU is OFF */
+         reg32_bit_clear(IVA2_MMU2_CNTL, 1);
+#endif
+
+#if 0
+         udelay(2000);  /* (note) this can't replace the MMU2_CNTL regread */
+#endif
+
+         /* (note) without the following regread, the system (dm3730) freezes (why?) */
+         {
+            sU32 val = reg32_read(IVA2_MMU2_CNTL);
+
+            if(0 != val)
+            {
+               printk(KERN_WARNING "c64:dsp_poweron_and_reset: unexpected: MMU2_CNTL=0x%08x\n", val);
+            }
+         }
+         
+#if 0
+         if(0 && C64_DEBUG_LEVEL(10))
+         {
+            printk(KERN_DEBUG "c64: ..OK, IVA2_MMU2 is now disabled.\n");
+         }
+#endif
+      }
+     
+     
+      /* Enable automatic transition */
+      reg32_write(IVA2_CM_CLKSTCTRL, 3);
+
+      /* Wait for 'on' transition */
+      {
+         sUI timeout = 0;
+         
+         while(3u != (reg32_read(IVA2_PRM_PWSTST) & 3u))
+         {
+            timeout++;
+            
+            if(timeout >= 0x20000000u)
+            {
+               break;
+            }
+         }
+      }
+
+      /* Read current power state */
+      {
+         sU32 val = reg32_read(IVA2_PRM_PWSTST);
+         
+         if(3u == (val & 3u))
+         {
+            /* Power on L2 SRAM */
+            reg32_write(IVA2_PRM_PWSTCTRL,
+                        reg32_read(IVA2_PRM_PWSTCTRL) | (3u << 20) | (3u << 22) | (1u << 3)
+                        );
+            
+            /* Set EN_MPU and EN_CORE bits => reduces idle power consumption by ~20mA (~80mW/h) */
+            reg32_write(IVA2_PRM_WKDEP, 3);
+
+            /* Enable interrupts */
+            spin_unlock_irqrestore(&dsp_spinlock, intFlags);
+            
+            /* Next dsp_start() is a reboot */
+            mlb_bootflag_set(DSP_BOOTFLAG_REBOOT);
+            
+            atomic_set(&at_dsp_state, ST_RESET);
+
+            /* Succeeded */
+            ret = 0;
+         }
+         else
+         {
+            /* Enable interrupts */
+            spin_unlock_irqrestore(&dsp_spinlock, intFlags);
+
+            /* Failed: DSP power domain failed to transition to 'ON' state */
+            printk(KERN_ERR "c64::dsp_poweron_and_reset: IVA2_PRM_PWSTST=0x%08x => DSP is still OFF!!\n",
+                   val
+                   );
+
+            ret = -EBUSY;
+         }
+      }
+   }
+   else
+   {
+      if(ST_RESET != dspState)
+      {
+         /* Failed: DSP is in unexpected state */
+         printk(KERN_ERR "c64::dsp_poweron_and_reset: wrong DSP state, expected %d, have %d.\n",
+                ST_OFF,
+                dspState
+                );
+         
+         ret = -EACCES;
+      }
+      else
+      {
+         /* Succeeded (already reset) */
+         ret = 0;
+      }
+   }
+
+   return ret;
+}
+
+
+/*--------------------------------------------------------------------------- dsp_start() */
+int dsp_start(sU32 _entryPoint) {
+   int ret;
+   int dspState;
+
+   dspState = atomic_read(&at_dsp_state);
+
+   if(ST_RESET == dspState)
+   {
+      if(C64_DEBUG_LEVEL(1))
+      {
+         printk(KERN_DEBUG "c64::dsp_start: dsp_config.ram.phys_addr=0x%08x size=0x%08x\n",
+                dsp_config.ram.phys_addr,
+                dsp_config.ram.size
+                );
+      }
+
+      if((_entryPoint >= dsp_config.ram.phys_addr) &&
+         (_entryPoint <  (dsp_config.ram.phys_addr + dsp_config.ram.size))
+         )
+      {
+         void __iomem *virtAddr;
+
+         /* Generate C64+ startup code (this block is partially borrowed from TI) */
+         
+         /* Map reset vector to GPP */
+
+         /* (note) Must use kvirtaddr already obtained by dma_alloc_coherent()
+          *         Calling ioremap_nocache() causes a kernel crash
+          */
+#ifdef USE_PLATFORM_DRIVER
+         virtAddr = (void __iomem *)dma_virt_4m;
+#else
+         /* (note) do not have a kvirtual address, yet. */
+         if(C64_DEBUG_LEVEL(1))
+         {
+            printk(KERN_DEBUG "c64::dsp_start: ioremap_nocache(0x%08x, 0x%08x)\n",
+                   dsp_config.reset_vector.phys_addr, DSP_RESET_VECTOR_CODESIZE
+                   );
+         }
+
+         virtAddr = ioremap_nocache(dsp_config.reset_vector.phys_addr, DSP_RESET_VECTOR_CODESIZE);
+#endif /* USE_PLATFORM_DRIVER */
+         
+         if(NULL != virtAddr)
+         {
+            __iomem sU32 *code  = (__iomem sU32*) virtAddr;
+            sU32  entryPtAddrHi = 0x00000000u;
+            sU32  entryPtAddrLo = 0x00000000u;
+            sU32  startOpCodeLo = 0x0000002Au;
+            sU32  startOpCodeHi = 0x0000006Au;
+            sU32  noOp          = 0x00400000u;
+            sU32  branch        = 0x00000362u;
+            
+            unsigned long intFlags;
+            
+            if(C64_DEBUG_LEVEL(1))
+            {
+               printk(KERN_DEBUG "c64::dsp_start: entryPoint=0x%08x\n", _entryPoint);
+            }
+            
+            /* Write branch to boot.64P in .sysinit segment (_c_int00) */
+            entryPtAddrHi  = (_entryPoint >> 16);
+            entryPtAddrLo  = (_entryPoint & 0xFFFFu);
+            startOpCodeHi |= (entryPtAddrHi << 7);
+            startOpCodeLo |= (entryPtAddrLo << 7);
+            *code++ = startOpCodeLo;
+            *code++ = startOpCodeHi;
+            *code++ = branch;
+            
+            /* Write 5 no-ops for pipeline flush */
+            *code++ = noOp;
+            *code++ = noOp;
+            *code++ = noOp;
+            *code++ = noOp;
+            *code++ = noOp;
+            
+#ifndef USE_PLATFORM_DRIVER
+            /* Unmap reset vector */
+            iounmap(virtAddr);
+#endif /* USE_PLATFORM_DRIVER */
+
+            /* Disable interrupts */
+            spin_lock_irqsave(&dsp_spinlock, intFlags);
+
+            /* Set reset vector */
+            reg32_write(IVA2_SCM_GENERAL_BOOTADDR, dsp_config.reset_vector.phys_addr);
+            
+            /* Set boot mode to "Direct boot" */
+            reg32_write(IVA2_SCM_GENERAL_BOOTMOD, 0);
+            
+            /* Enable GPTIMER5 functional clock */
+            reg32_bit_set(IVA2_PER_CM_FCLKEN, 6);
+            
+            /* Enable GPTIMER5 interface clock (EN_GPT5) */
+            reg32_bit_set(IVA2_PER_CM_ICLKEN, 6);
+            
+            /* Set GPTIMER5 clock source to SYS_CLK */
+            reg32_bit_set(IVA2_PER_CM_CLKSEL, 3);
+            
+#if 0 // note: clock is already enabled!
+            /* Disable automatic transition (clear bit 0, bits 1..31 are reserved) */
+            reg32_write(IVA2_CM_CLKSTCTRL, 0);
+            
+            /* Enable IVA2_CLK (set bit 1, bits 1..31 are reserved) */
+            reg32_write(IVA2_CM_FCLKEN, 1); 
+            
+            /* Enable automatic transition (sets reserved bit 1 ??) */
+            reg32_write(IVA2_CM_CLKSTCTRL, 3);
+#endif // 0
+            
+            /* Clear RST1 bit to release DSP from reset */
+            reg32_bit_clear(IVA2_PRM_RSTCTRL, 0);
+
+            /* Enable interrupts */
+            spin_unlock_irqrestore(&dsp_spinlock, intFlags);
+            
+            dsp_entry_point = _entryPoint;
+
+            /* Wait for DSP startup */
+            {
+               sUI i;
+
+               for(i=0; i<100; i++)
+               {
+                  if(DSP_BOOTFLAG_RUNNING == mlb_bootflag_get())
+                  {
+                     break;
+                  }
+                  udelay(100);
+               }
+            }
+            
+            {
+               sU32 bootFlag = mlb_bootflag_get();
+
+               if(DSP_BOOTFLAG_RUNNING == bootFlag)
+               {
+                  atomic_set(&at_dsp_state, ST_RUNNING);
+                  
+                  if(c64_pwrlog)
+                  {
+                     printk(KERN_DEBUG "c64::dsp_start: DSP started @0x%08x\n", dsp_entry_point);
+                  }
+                  
+                  /* Succeeded */
+                  ret = 0;
+               }
+               else
+               {
+                  /* Failed: DSP is not signaling RUNNING state */
+                  printk(KERN_ERR "c64::dsp_start: FAILED to start DSP! (bootflag=0x%08x)\n",
+                         bootFlag
+                         );
+
+                  ret = -EBUSY;
+               }
+            }
+         }
+         else
+         {
+            /* Failed: ioremap_nocache() */
+            printk(KERN_ERR "c64::dsp_start: ioremap_nocache() failed.\n");
+            
+            ret = -EFAULT;
+         }
+      }
+      else
+      {
+         /* Failed: DSP entry point outside of DSP image */
+         printk(KERN_ERR "c64::dsp_start: dsp_entry_point (0x%08x) outside of DSP image area.\n",
+                _entryPoint
+                );
+
+         ret = -EINVAL;
+      }
+   }
+   else
+   {
+      /* Failed: DSP is in unexpected state */
+      printk(KERN_ERR "c64::dsp_start: wrong DSP state, expected %d, have %d.\n",
+             ST_RESET,
+             dspState
+             );
+
+      ret = -EACCES;
+   }
+
+   return ret;
+}
+
+
+/*--------------------------------------------------------------------------- dsp_resume() */
+int dsp_resume(void) {
+   int ret;
+
+   int dspState = atomic_read(&at_dsp_state);
+
+   if(ST_OFF == dspState)
+   {
+      if(0 != dsp_entry_point)
+      {
+         if(C64_DEBUG_LEVEL(1))
+         {
+            printk(KERN_DEBUG "c64::dsp_resume: resuming DSP program execution @0x%08x\n",
+                   dsp_entry_point
+                   );
+         }
+
+         ret = dsp_poweron_and_reset();
+
+         if(0 == ret)
+         {
+            /* Resume */
+            mlb_bootflag_set(DSP_BOOTFLAG_RESUME);
+
+            ret = dsp_start(dsp_entry_point);
+         }
+      }
+      else
+      {
+         /* Failed: DSP has not been started before */
+         printk(KERN_ERR "c64::dsp_resume: dsp_entry_point is NULL.\n");
+
+         ret = -EACCES;
+      }
+   }
+   else
+   {
+      if(ST_RUNNING != dspState)
+      {
+         /* Failed: DSP is in unexpected state */
+         printk(KERN_ERR "c64::dsp_resume: wrong DSP state, expected %d, have %d.\n",
+                ST_OFF,
+                dspState
+                );
+         
+         ret = -EACCES;
+      }
+      else
+      {
+         /* Succeeded (already running) */
+         ret = 0;
+      }
+   }
+
+   return ret;
+}
+
+
+/*--------------------------------------------------------------------------- dsp_poweroff() */
+int dsp_poweroff(void) {
+   int ret;
+   unsigned long intFlags;
+   int dspState;
+
+   dspState = atomic_read(&at_dsp_state);
+
+   if(ST_OFF != dspState)
+   {
+      udelay(10);  /* weird: w/o this, sporadic IVA2 inband errors occur during c64_pwrbench !?? */
+      
+      /* Disable interrupts */
+      spin_lock_irqsave(&dsp_spinlock, intFlags);
+      
+      /* Disable GPTIMER5 functional clock (EN_GPT5) */
+      reg32_bit_clear(IVA2_PER_CM_FCLKEN, 6);
+      
+      /* Disable GPTIMER5 interface clock (EN_GPT5) */
+      reg32_bit_clear(IVA2_PER_CM_ICLKEN, 6);
+      
+#if 0
+      /* Enable DSP functional clock */
+      reg32_write(IVA2_CM_FCLKEN, 1);
+#endif
+      
+      /* Enable DPLL low power mode bypass */
+      reg32_write(IVA2_CM_CLKEN_PLL, (1u<<4) | 5u);
+      
+      /* Turn off IVA2 power (domain+L1/L2) */
+      reg32_write(IVA2_PRM_PWSTCTRL, /* 4830 60e0 */
+                  0u
+                  );
+      
+      /* Remove power domain dependencies */
+      reg32_write(IVA2_PRM_WKDEP, 0); /* 4830 60c8 */
+      
+      /* Turn on auto-idle enable */
+      reg32_write(IVA2_CM_AUTOIDLE_PLL, 1);
+      
+      /* Release MMU reset */
+      reg32_write(IVA2_PRM_RSTCTRL, 5);
+      
+      /* Assert it back */
+      reg32_write(IVA2_PRM_RSTCTRL, 7);
+      
+      /* Start automatic transition */
+      reg32_write(IVA2_CM_CLKSTCTRL, 3); /* 4800 4048 */
+      
+      /* Disable DSP functional clock */
+      ////reg32_write(IVA2_CM_FCLKEN, 0);
+      dev_iva2_clk_set_enable(S_FALSE);
+      
+      /* Wait for the 'off' transition */
+      {
+         sUI timeout = 0;
+         
+         while(0u != (reg32_read(IVA2_PRM_PWSTST) & 3u))
+         {
+            timeout++;
+            
+            if(timeout >= 0x20000000u)
+            {
+               break;
+            }
+         }
+      }
+      
+      /* Read current power state */
+      {
+         sU32 val = reg32_read(IVA2_PRM_PWSTST); /* 4830 60e4 */
+         
+         /* Enable interrupts */
+         spin_unlock_irqrestore(&dsp_spinlock, intFlags);
+         
+         /* Print DSP power state */
+         if(c64_pwrlog)
+         {
+            printk(KERN_DEBUG "c64::dsp_poweroff: IVA2_PRM_PWSTST=0x%08x => %s\n", 
+                   val,
+                   (0 == (val & 3u)) ? "DSP is OFF" : "DSP is still on!!!"
+                   );
+         }
+         
+         if(0 == (val & 3u))
+         {
+            /* Notify kernel that DSP is now powered off */
+#ifdef USE_DSP_POWER_NOTIFY
+            dsp_power_notify(S_FALSE/*0*/);
+#else
+            dsp_power_notify__STUB(S_FALSE/*0*/);
+#endif /* USE_DSP_POWER_NOTIFY */
+            
+            atomic_set(&at_dsp_state, ST_OFF);
+            
+            /* Succeeded */
+            ret = 0;
+         }
+         else
+         {
+            /* Failed: DSP power domain failed to transition to 'OFF' state */
+            if(!c64_pwrlog)
+            {
+               printk(KERN_ERR "c64::dsp_poweroff: IVA2_PRM_PWSTST=0x%08x => DSP is still on!!\n", 
+                      val
+                      );
+            }
+            
+            ret = -EBUSY;
+         }
+      }
+   }
+   else
+   {
+      /* Succeeded: DSP is already powered off */
+      ret = 0;
+   }
+   
+   return ret;
+}
+
+
+/*--------------------------------------------------------------------------- dsp_init() */
+sBool dsp_init(void) {
+
+   return S_TRUE;
+}
+
+
+/*--------------------------------------------------------------------------- dsp_exit() */
+void dsp_exit(void) {
+
+   (void)dsp_poweroff();
+}

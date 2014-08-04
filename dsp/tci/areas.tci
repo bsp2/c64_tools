@@ -1,0 +1,76 @@
+
+/*  ============================================================================
+ *  MEM: MLB_SYSCALLS
+ *  ============================================================================
+ */
+var MLB_SYSCALLS = prog.module("MEM").create("MLB_SYSCALLS");
+MLB_SYSCALLS.base             = DSP_BASE + DSP_RESET_SIZE;
+MLB_SYSCALLS.len              = DSP_SYSCALLS_SIZE; // 4 KBytes
+MLB_SYSCALLS.space            = "code/data";
+//MLB_SYSCALLS.createHeap       = true;
+MLB_SYSCALLS.heapSize         = 0x00000000;
+MLB_SYSCALLS.comment          = "MLB_SYSCALLS";
+
+
+/*  ============================================================================
+ *  MEM: AREA2_x  (application specific overlays #1..#4)
+ *  ============================================================================
+ */
+var cBase = (DSP_BASE + DSP_CORE_SIZE);
+var i;
+
+var comSize       = 0x000000040; // 64 bytes
+
+for(i=0; i<4; i++)
+{
+   var areaName = "AREA2_"+(i+1)+"_COM";
+
+   print("creating overlay area "+areaName);
+
+   var area = prog.module("MEM").create(areaName);
+   area.base     = cBase;
+   area.len      = 0x00000040;
+   area.space    = "code/data";
+   //area.createHeap = false;
+   area.heapSize = 0;
+   area.comment  = areaName;
+
+   areaName = "AREA2_"+(i+1)+"_RAM";
+
+   print("creating overlay area "+areaName);
+
+   area = prog.module("MEM").create(areaName);
+   area.base       = cBase + comSize;
+   area.len        = DSP_AREA2_SEGSIZE - comSize;
+   area.space      = "code/data";
+   //area.createHeap = true;
+   area.heapSize   = DSP_AREA2_HEAPSIZE;
+   area.comment    = areaName;
+
+   /* Create next area */
+   cBase = cBase + DSP_AREA2_SEGSIZE;
+}
+
+/*  ============================================================================
+ *  @TBD: MEM : AREA3  (main-application-specific overlay)
+ *  ============================================================================
+ */
+print("creating overlay area AREA3_COM");
+
+var AREA3_COM = prog.module("MEM").create("AREA3_COM");
+AREA3_COM.base             = cBase;
+AREA3_COM.len              = comSize;
+AREA3_COM.space            = "code/data";
+//AREA3_COM.createHeap       = false;
+AREA3_COM.heapSize         = 0x00000000;
+AREA3_COM.comment          = "AREA3_COM";
+
+print("creating overlay area AREA3_RAM");
+
+var AREA3_RAM = prog.module("MEM").create("AREA3_RAM");
+AREA3_RAM.base             = cBase + AREA3_COM.len;
+AREA3_RAM.len              = DSP_AREA3_SIZE - comSize; // ~1024 KBytes
+AREA3_RAM.space            = "code/data";
+//AREA3_RAM.createHeap       = true;
+AREA3_RAM.heapSize         = DSP_AREA3_HEAPSIZE; // ~64 KBytes
+AREA3_RAM.comment          = "AREA3_RAM";

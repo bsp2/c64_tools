@@ -1,0 +1,6 @@
+bsp@nova:/bsp/pandora/c64_tools$ ls -1d /home/bsp/ti/*
+/home/bsp/ti/bios_5_42_01_09
+/home/bsp/ti/c64xplus-iqmath_2_01_04_00
+/home/bsp/ti/fastRTS_c62xc64x_1_42
+/home/bsp/ti/TI_CGT_C6000_7.4.5
+/home/bsp/ti/xdctools_3_25_03_72

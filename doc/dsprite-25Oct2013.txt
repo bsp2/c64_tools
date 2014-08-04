@@ -1,0 +1,63 @@
+pandora:/home/bsp# ./c64_dsprite 
+[...]         mode: MODE_PREMUL_SRCOVER
+[...]     #sprites: 256
+[...]   clear_mode: GPP
+[...]  #iterations: 600
+[...]        slomo: 1.000000
+[...]        vsync: YES
+[...]       img_nr: 32x32
+[...] omapfb_plane_enable: ok, plane 0 is now disabled.
+[...] omapfb_plane_setup: ok, plane 1 is now disabled.
+[...] omapfb_plane_setup: OK, plane 1 is configured size=(800; 480) geo=(0; 0; 800; 480) virt=(864; 1088) bpp=32.
+[...] omapfb_plane_setup_dsp_mem: plane 1 virt_addr=0x40825000, phys_addr=0x9c900000 size=0x00396000.
+[...] omapfb_init: OK.
+[...] coff_load_overlay: text=0x00000ca0  data=0x00000068  bss=0x00001110
+[dbg] fshm_img: phys_addr=0x5cf0e000, virt_addr=0x402b0000
+[dbg] fshm_img: DSP phys_addr=0x10f0e000
+[dbg] loc_init: loc_sprite_init() ok.
+[...] 600 iterations in 10005 millisecs.
+[...]  ==> avg FPS=59.970
+[...] omapfb_plane_enable: ok, plane 1 is now disabled.
+[dbg] omapfb_exit: [1] unmapped 3760128 bytes @virt=0x40825000 (phys=0x9c900000).
+[...] omapfb_plane_enable: ok, plane 0 is now enabled.
+
+
+------------------------------------------------------------------------------------------
+pandora:/home/bsp# ./c64_dsprite 1 4000 1 100 1.0 1 1
+[...]         mode: MODE_ALPHATEST
+[...]     #sprites: 4000
+[...]   clear_mode: GPP
+[...]  #iterations: 100
+[...]        slomo: 1.000000
+[...]        vsync: YES
+[...]       img_nr: 8x8
+[...] omapfb_plane_enable: ok, plane 0 is now disabled.
+[...] omapfb_plane_setup: ok, plane 1 is now disabled.
+[...] omapfb_plane_setup: OK, plane 1 is configured size=(800; 480) geo=(0; 0; 800; 480) virt=(816; 992) bpp=32.
+[...] omapfb_plane_setup_dsp_mem: plane 1 virt_addr=0x40827000, phys_addr=0x9c900000 size=0x00317000.
+[...] omapfb_init: OK.
+[...] coff_load_overlay: text=0x00000ca0  data=0x00000068  bss=0x00001110
+[dbg] fshm_img: phys_addr=0x5cf0e000, virt_addr=0x4009a000
+[dbg] fshm_img: DSP phys_addr=0x10f0e000
+[dbg] loc_init: loc_sprite_init() ok.
+[...] 100 iterations in 1670 millisecs.
+[...]  ==> avg FPS=59.880
+[...] omapfb_plane_enable: ok, plane 1 is now disabled.
+[dbg] omapfb_exit: [1] unmapped 3239936 bytes @virt=0x40827000 (phys=0x9c900000).
+[...] omapfb_plane_enable: ok, plane 0 is now enabled.
+pandora:/home/bsp# 
+
+
+------------------------------------------------------------------------------------------
+pandora:/home/bsp# ./c64_dsprite -h
+Usage: ./c64_dsprite [mode] [num_sprites] [clear_mode] [num_iterations] [speed] [vsync] [img_nr]
+
+             mode: 0=copy, 1=alphatest, 2=premul srcover + saturate, 3=srcover [default is 2]
+      num_sprites: 1..4096 [default is 256]
+       clear_mode: 0=none, 1=GPP (memcpy), 2=DSP (EDMA) [default is 1]
+   num_iterations: 1..60*60*60 (~1h at 60Hz) [default is 60*10]
+            speed: sprite movement speed scale (float value) [default is 1.0]
+            vsync: 1=on, 0=off [default is 1]
+           img_nr: 0=logo (32x32), 1=bullet (8x8) [default is 0]
+
+pandora:/home/bsp# 

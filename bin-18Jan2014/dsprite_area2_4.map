@@ -1,0 +1,171 @@
+******************************************************************************
+               TMS320C6x Linker Unix v7.4.5                    
+******************************************************************************
+>> Linked Wed Dec 11 23:05:18 2013
+
+OUTPUT FILE NAME:   <dsprite_area2_4.out>
+ENTRY POINT SYMBOL: "_c_int00"  address: 862c1d60
+
+
+MEMORY CONFIGURATION
+
+         name            origin    length      used     unused   attr    fill
+----------------------  --------  ---------  --------  --------  ----  --------
+  L1DSRAM               10f04000   0000c000  00000000  0000c000  RWIX
+  MLB_SYSCALLS          86001000   00001000  000000d8  00000f28  RWIX
+  AREA_COM              862c0000   00000040  00000034  0000000c  RWIX
+  AREA_RAM              862c0040   0003ffc0  00001e54  0003e16c  RWIX
+
+
+SECTION ALLOCATION MAP
+
+ output                                  attributes/
+section   page    origin      length       input sections
+--------  ----  ----------  ----------   ----------------
+.vers      0    00000000    00000000     COPY SECTION
+
+.pinit     0    862c0040    00000000     UNINITIALIZED
+
+.sec_mlb_syscalls 
+*          0    86001000    000000d8     UNINITIALIZED
+                  86001000    000000d8     dsprite.o64 (.sec_mlb_syscalls)
+
+.sec_com   0    862c0000    00000034     UNINITIALIZED
+                  862c0000    00000034     dsprite.o64 (.sec_com)
+
+.bss       0    862c0040    00000000     UNINITIALIZED
+
+.data      0    862c0040    00000000     UNINITIALIZED
+
+.stack     0    862c0040    00001000     UNINITIALIZED
+                  862c0040    00000008     rts64plus.lib : boot.obj (.stack)
+                  862c0048    00000ff8     --HOLE--
+
+.text      0    862c1040    00000de0     
+                  862c1040    00000a00     dsprite.o64 (.text)
+                  862c1a40    000000c0     rts64plus.lib : autoinit.obj (.text:__auto_init)
+                  862c1b00    000000c0                   : exit.obj (.text:_exit)
+                  862c1bc0    000000a0                   : cpy_tbl.obj (.text:_copy_in)
+                  862c1c60    000000a0                   : memcpy64.obj (.text:_memcpy)
+                  862c1d00    00000060                   : cpp_init.obj (.text:___TI_cpp_init)
+                  862c1d60    00000060                   : boot.obj (.text:_c_int00)
+                  862c1dc0    00000040                   : args_main.obj (.text:__args_main)
+                  862c1e00    00000020                   : exit.obj (.text:_abort)
+
+.cinit     0    862c1e20    00000054     
+                  862c1e20    0000002c     rts64plus.lib : exit.obj (.cinit)
+                  862c1e4c    00000004     --HOLE-- [fill = 0]
+                  862c1e50    00000020     dsprite.o64 (.cinit)
+                  862c1e70    00000004     --HOLE-- [fill = 0]
+
+.switch    0    862c1e74    00000014     
+                  862c1e74    00000014     dsprite.o64 (.switch:_loc_process)
+
+.far       0    862c1e88    0000000c     UNINITIALIZED
+                  862c1e88    0000000c     rts64plus.lib : exit.obj (.far)
+
+
+GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
+
+address    name
+--------   ----
+862c0040   $bss
+862c0040   .bss
+862c0040   .data
+862c1040   .text
+862c1e00   C$$EXIT
+862c0040   GBL_stackbeg
+862c103f   GBL_stackend
+862c1038   _HWI_STKBOTTOM
+862c0040   _HWI_STKTOP
+862c1040   __STACK_END
+00001000   __STACK_SIZE
+00000001   __TI_args_main
+862c1d00   ___TI_cpp_init
+862c1e90   ___TI_enable_exit_profile_output
+ffffffff   ___TI_pprof_out_hndl
+ffffffff   ___TI_prof_data_size
+ffffffff   ___TI_prof_data_start
+ffffffff   ___binit__
+862c0040   ___bss__
+ffffffff   ___c_args__
+862c1e20   ___cinit__
+862c0040   ___data__
+862c0040   ___edata__
+862c0040   ___end__
+862c1e20   ___etext__
+ffffffff   ___pinit__
+862c1040   ___text__
+862c1dc0   __args_main
+862c1a40   __auto_init
+862c1e88   __cleanup_ptr
+862c1e8c   __dtors_ptr
+862c0040   __stack
+862c1e00   _abort
+862c1d60   _c_int00
+862c0000   _component_dsprite
+862c1bc0   _copy_in
+862c1b00   _exit
+862c1040   _main
+862c1c60   _memcpy
+86001000   _syscalls
+ffffffff   binit
+862c1e20   cinit
+862c0040   edata
+862c0040   end
+862c1e20   etext
+ffffffff   pinit
+
+
+GLOBAL SYMBOLS: SORTED BY Symbol Address 
+
+address    name
+--------   ----
+00000001   __TI_args_main
+00001000   __STACK_SIZE
+86001000   _syscalls
+862c0000   _component_dsprite
+862c0040   $bss
+862c0040   .bss
+862c0040   .data
+862c0040   GBL_stackbeg
+862c0040   _HWI_STKTOP
+862c0040   ___bss__
+862c0040   ___data__
+862c0040   ___edata__
+862c0040   ___end__
+862c0040   __stack
+862c0040   edata
+862c0040   end
+862c1038   _HWI_STKBOTTOM
+862c103f   GBL_stackend
+862c1040   .text
+862c1040   __STACK_END
+862c1040   ___text__
+862c1040   _main
+862c1a40   __auto_init
+862c1b00   _exit
+862c1bc0   _copy_in
+862c1c60   _memcpy
+862c1d00   ___TI_cpp_init
+862c1d60   _c_int00
+862c1dc0   __args_main
+862c1e00   C$$EXIT
+862c1e00   _abort
+862c1e20   ___cinit__
+862c1e20   ___etext__
+862c1e20   cinit
+862c1e20   etext
+862c1e88   __cleanup_ptr
+862c1e8c   __dtors_ptr
+862c1e90   ___TI_enable_exit_profile_output
+ffffffff   ___TI_pprof_out_hndl
+ffffffff   ___TI_prof_data_size
+ffffffff   ___TI_prof_data_start
+ffffffff   ___binit__
+ffffffff   ___c_args__
+ffffffff   ___pinit__
+ffffffff   binit
+ffffffff   pinit
+
+[46 symbols]

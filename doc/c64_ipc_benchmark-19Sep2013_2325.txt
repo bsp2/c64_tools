@@ -1,0 +1,32 @@
+pandora:/home/bsp# ./go64.sh 
+ 
+go64.sh: ARGS="" DSPIMAGE="./c64p_simple_dm3730.out"
+[...] loading DSP image from "./c64p_simple_dm3730.out"
+[dbg] coff_open: file size=220698 (0x00035e1a)
+[...] reading 52 section headers....................................................
+[...] initializing DSP memory and copying sections..
+[...]  text=0x000063a0  data=0x0000134f  bss=0x002103bc
+[...] DSP image loaded successfully. starting DSP..
+[dbg] waiting for DSP startup..
+[...] DSP is up and running!
+pandora:/home/bsp# ./c64_tc 6
+[...] selected testcase 6 ("TC_FASTCALL_RPC_ADD")
+[...] starting fastcall benchmark
+[...] fastcall benchmark finished. => 1000000 iterations in 2458 millisecs.
+pandora:/home/bsp#  
+
+
+Configuration:
+
+  [ ] flush_cache_all()
+  [x] DSP L1D
+  [ ] DSP L2D
+  [x] use L1DSRAM for IRQ-driven IPC
+  [x] fastcalls
+
+
+  ==> 0.002458 millisec messaging overhead per roundtrip/RPC.
+  ==> 406834.825 roundtrips/RPCs per second. (6781 RPCs per 60Hz video frame)
+
+  ==> 284.784 times faster than DspLink (based on M-HT's measurement, i.e. ~0.7ms/roundtrip)
+  ==> 17.37 times faster than c64_tools-18Sep2013

@@ -1,0 +1,4 @@
+pandora:/home/bsp# ./c64_tc 7
+[...] selected testcase 7 ("TC_SRAM_SPEED")
+[...] starting SRAM write benchmark....DONE: 10000000 32bit write accesses in 2566 milliseconds
+[...] starting SRAM read benchmark....DONE: 10000000 32bit read accesses in 2590 milliseconds (chksum=0xfffffff8)

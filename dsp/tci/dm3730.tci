@@ -1,0 +1,77 @@
+
+/*
+ * Setup platform-specific memory map, CLK rate, etc.
+ */
+var mem_ext = [];
+
+///* Specify the L1 and L2 memory settings */
+var device_regs = {
+    l1PMode: "32k",
+    l1DMode: "32k",
+    //l1DMode: "16k",
+    //l1DMode: "0k",
+    l2Mode: "0k" // 0??????? should be 64k! (--> but using 32k or 64k causes a bus error in linux..hm..)
+    //l2Mode: "64k"
+    //l2Mode: "32k"
+};
+
+var params = {
+  clockRate: 430,  // has no effect on the actual clockrate (will be 800Mhz on 1Ghz Pandoras and 430Mhz on the others)
+  catalogName: "ti.catalog.c6000",
+  //deviceName: "3730",
+  deviceName: "3530",
+  regs: device_regs,
+};
+
+
+/*  ============================================================================
+ *  Load base TCI file.
+ *  ============================================================================
+ */
+utils.loadPlatform("ti.platforms.generic", params); // cfg. generic platform w/ params
+
+
+////bios.GBL.CLKOUT = 552.0000;
+//bios.GBL.CLKOUT = 800.0000;
+bios.GBL.CLKOUT = 430.0000; // no effect
+
+
+/*  ============================================================================
+ *  @TBD: GBL
+ *  ============================================================================
+ */
+prog.module("GBL").C64PLUSCONFIGURE   = true ;
+////prog.module("GBL").C64PLUSL2CFG       = "32k" ;
+//prog.module("GBL").C64PLUSL2CFG       = "64k" ;
+prog.module("GBL").C64PLUSL2CFG       = "0k" ; // debug, should be 64k
+prog.module("GBL").C64PLUSL1DCFG      = "32k" ;
+//prog.module("GBL").C64PLUSL1DCFG      = "16k" ;
+//prog.module("GBL").C64PLUSL1DCFG      = "0k" ; // debug, should be 23k
+
+prog.module("GBL").C64PLUSMAR64to95   = 0x00000003;
+prog.module("GBL").C64PLUSMAR96to127  = 0x00000003;
+bios.GBL.C64PLUSMAR64to95 = 0xffffffff;
+bios.GBL.C64PLUSMAR96to127 = 0xffffffff;
+bios.GBL.C64PLUSMAR128to159 = 0xffffffff;
+
+
+
+bios.GBL.C64PLUSL1PCFG = "32k";
+bios.GBL.C64PLUSL1DCFG = "32k";
+//bios.GBL.C64PLUSL1DCFG = "16k";
+//bios.GBL.C64PLUSL1DCFG = "0k"; // debug, should be 32k
+//bios.GBL.C64PLUSL2CFG = "64k";
+bios.GBL.C64PLUSL2CFG = "0k"; // debug, should be 64k
+////bios.GBL.C64PLUSL2CFG = "32k";
+
+//////bios.MEM.instance("L1DSRAM").base = 0x11f04000;
+//////bios.MEM.instance("L1DSRAM").len = 0x00010000;
+//////bios.MEM.instance("CACHE_L1D").base = 0x11f14000;
+//////bios.MEM.instance("CACHE_L1D").len = 0x00004000;
+
+// Assign 64kb of L2 SRAM to cache, 32kb to IRAM
+var IRAM = prog.get("IRAM");
+IRAM.base = 0x007f8000;
+IRAM.len  = 0x00008000;
+bios.MEM.instance("CACHE_L2").base = IRAM.base + IRAM.len;
+bios.MEM.instance("CACHE_L2").len = 0x00010000;

@@ -1,0 +1,29 @@
+[8] + Done                       ./c64_tc 3
+[7] + Done                       ./c64_tc 3
+[6] + Done                       ./c64_tc 3
+[5] + Done                       ./c64_tc 3
+[4] + Done                       ./c64_tc 3
+[3] + Done                       ./c64_tc 3
+[2] + Done                       ./c64_tc 3
+[1] + Done                       ./c64_tc 3
+pandora:/home/bsp# dmesg -c
+[ 4865.566894] c64::dev::open: client connected (filep=0xd4241c00).
+[ 4865.566955] c64::dsp_resume: resuming DSP program execution @0x8604bca0
+[ 4865.567016] c64::dsp_start: dsp_config.ram.phys_addr=0x86001000 size=0x003ff000
+[ 4865.567016] c64::dsp_start: entryPoint=0x8604bca0
+[ 4865.894439] c64::dev::open: client connected (filep=0xd426ed00).
+[ 4866.180908] c64::dev::open: client connected (filep=0xd67d7800).
+[ 4866.414825] c64::dev::open: client connected (filep=0xd426ef00).
+[ 4866.631011] c64::dev::open: client connected (filep=0xd4146100).
+[ 4866.869110] c64::dev::open: client connected (filep=0xd426e500).
+[ 4867.061126] c64::dev::open: client connected (filep=0xd64f1c00).
+[ 4867.310821] c64::dev::open: client connected (filep=0xd67ab180).
+[ 4892.433135] c64::dev::release: client disconnected (filep=0xd4241c00).
+[ 4896.670989] c64::dev::release: client disconnected (filep=0xd426ef00).
+[ 4896.836914] c64::dev::release: client disconnected (filep=0xd426ed00).
+[ 4897.057891] c64::dev::release: client disconnected (filep=0xd67d7800).
+[ 4897.220733] c64::dev::release: client disconnected (filep=0xd67ab180).
+[ 4897.421173] c64::dev::release: client disconnected (filep=0xd426e500).
+[ 4897.474731] c64::dev::release: client disconnected (filep=0xd64f1c00).
+[ 4897.572631] c64::dev::release: client disconnected (filep=0xd4146100).
+[ 4897.572662] c64::dev::release: powering down DSP after last client disconnected.

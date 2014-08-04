@@ -1,0 +1,62 @@
+
+
+----------------------------------------------------------------------------------------------------
+test #1:
+
+           in makefile.c64p: OPTFLAGS+= $(OPTFLAGS_SIZE)
+in test_logbuf.c:<global>  : int cnt_i = 42;
+                in map file: 8620189c   _cnt_i
+in test_logbuf.c:loc_init(): syscalls.mlb_debug_usr(3, (sU32)cnt_i);
+                     result: [dbg] dsp_debug_usr_print: debug_usr[3]=0x00000000.
+
+  ==> whoops, debug should read 0x2a (42)!!
+
+
+----------------------------------------------------------------------------------------------------
+test #2:
+
+           in makefile.c64p: OPTFLAGS+= $(OPTFLAGS_SIZE)
+in test_logbuf.c:<global>  : int cnt_i = 42;
+                in map file: 8620189c   _cnt_i
+in test_logbuf.c:loc_init(): syscalls.mlb_debug_usr(3, *(volatile sS32*) 0x8620189c); //cnt_i
+                     result: [dbg] dsp_debug_usr_print: debug_usr[3]=0x0000002a.
+
+  ==> correct data, cinit works
+
+
+----------------------------------------------------------------------------------------------------
+test #3:
+
+           in makefile.c64p: OPTFLAGS+= $(OPTFLAGS_SIZE)
+in test_logbuf.c:<global>  : int cnt_i = 64;
+                in map file: 8620189c   _cnt_i
+in test_logbuf.c:loc_init(): syscalls.mlb_debug_usr(3, (sU32) &cnt_i);
+                     result: [dbg] dsp_debug_usr_print: debug_usr[3]=0x860555c0.
+
+  ==> whoops, DSP uses wrong address of cnt_i although it's listed correctly in the .map file!
+ 
+
+----------------------------------------------------------------------------------------------------
+test #4:
+
+           in makefile.c64p: OPTFLAGS+= $(OPTFLAGS_NONE)
+in test_logbuf.c:<global>  : int cnt_i = 64;
+                in map file: 86201854   _cnt_i
+in test_logbuf.c:loc_init(): syscalls.mlb_debug_usr(3, (sU32) &cnt_i);
+                     result: [dbg] dsp_debug_usr_print: debug_usr[3]=0x860555c0.
+
+  ==> still the wrong address
+
+
+----------------------------------------------------------------------------------------------------
+test #5:
+
+           in makefile.c64p: OPTFLAGS+= $(OPTFLAGS_NONE_INTERLIST)
+              in install.mk: CFLAGS+= --mem_model:data=far   (note: default is far_aggregate)
+in test_logbuf.c:<global>  : int cnt_i = 64;
+                in map file: 86201880   _cnt_i
+in test_logbuf.c:loc_init(): syscalls.mlb_debug_usr(3, (sU32) &cnt_i);
+                     result: [dbg] dsp_debug_usr_print: debug_usr[3]=0x86201880.
+
+  ==> correct address, yay!
+

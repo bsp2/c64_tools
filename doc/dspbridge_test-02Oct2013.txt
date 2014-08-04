@@ -1,0 +1,43 @@
+
+with default 3.2.45 kernel:
+
+pandora:/home/bsp# modprobe mailbox
+pandora:/home/bsp# insmod /lib/modules/3.2.45/kernel/drivers/staging/tidspbridge/bridgedriver.ko  base_img=/lib/dsp/baseimage.dof
+pandora:/home/bsp# dmesg -c
+[  286.522186] bridgedriver: module is from the staging directory, the quality is unknown, you have been warned.
+[  286.617370] proc_load: Processor Loaded /lib/dsp/baseimage.dof
+[  286.617919] bridge_brd_start: Failed to get dsp mailbox handle
+[  286.618072] proc_start: Failed to start the dsp
+[  286.631744] DSP Bridge driver loaded
+pandora:/home/bsp# lsmod
+Module                  Size  Used by
+bridgedriver          167027  0 
+mailbox                 3899  1 bridgedriver
+aes_generic            33453  2 
+wl1251_sdio             3319  0 
+wl1251                 67433  1 wl1251_sdio
+mac80211              223525  2 wl1251_sdio,wl1251
+cfg80211              154825  2 wl1251,mac80211
+ecb                     1616  0 
+aufs                  159702  3 
+squashfs               27214  1 
+xz_dec                 17848  1 squashfs
+bluetooth             135962  0 
+omaplfb                 6407  0 
+pvrsrvkm              142886  1 omaplfb
+zram                   10170  1 
+snd_seq                47225  0 
+snd_seq_device          4491  1 snd_seq
+snd_pcm_oss            37481  0 
+snd_mixer_oss          13864  1 snd_pcm_oss
+ipv6                  231159  10 
+fuse                   57975  2 
+ads7846                 8481  0 
+hwmon                    964  1 ads7846
+pandora:/home/bsp# 
+
+
+
+with 3.2.45-c64_tools kernel:
+
+(same output)

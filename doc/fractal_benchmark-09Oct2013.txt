@@ -1,0 +1,15 @@
+
+GPP only: (float, -mfpu=vfp)
+[...] 3600 iterations in 65343 millisecs.
+
+DSP only: (fixpoint via iqmath)
+[...] 3600 iterations in 10841 millisecs.
+
+GPP only: (fixpoint, original _FPmpy)
+[...] 3600 iterations in 11054 millisecs.
+
+GPP only: (fixpoint, optimized _FPmpy)
+[...] 3600 iterations in 7652 millisecs.
+
+GPP+DSP:
+[...] 3600 iterations in 5054 millisecs.

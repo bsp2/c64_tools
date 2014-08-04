@@ -1,0 +1,108 @@
+#
+# c64_tools (commandline) testcases makefile
+#
+
+include ../install.mk
+include ../scp.mk
+
+#CFLAGS += -g
+CFLAGS += -O2 -pipe -march=armv7-a -mcpu=cortex-a8 -mtune=cortex-a8 -mfpu=neon
+#CFLAGS += -O3 -pipe -march=armv7-a -mcpu=cortex-a8 -mtune=cortex-a8 -mfpu=vfp
+
+CFLAGS += -I../dsp
+
+EXTRALIBS += -L../libc64 -lc64
+
+OBJ_TC= \
+	c64_tc.o
+
+OBJ_MINIMAL= \
+	c64_minimal.o
+
+OBJ_NOPS= \
+	c64_nops.o
+
+OBJ_SRAMTEST= \
+	c64_sramtest.o
+
+OBJ_PWRTEST= \
+	c64_pwrtest.o
+
+OBJ_PWRBENCH= \
+	c64_pwrbench.o
+
+OBJ_RESET= \
+	c64_reset.o
+
+OBJ_REGREAD= \
+	reg_read.o
+
+OBJ_REGWRITE= \
+	reg_write.o
+
+OBJ_CHKMEM= \
+	chkmem.o
+
+
+.PHONY: libc64
+libc64:
+	$(MAKE) -C ../libc64 -f makefile.linux bin
+
+
+.PHONY: bin
+bin: c64_tc c64_minimal c64_nops c64_sramtest c64_pwrtest c64_pwrbench c64_reset \
+	reg_read reg_write chkmem
+
+
+c64_tc: libc64 $(OBJ_TC)
+	$(CC) -o c64_tc $(LDFLAGS) $(OBJ_TC) $(EXTRALIBS)
+
+c64_minimal: libc64 $(OBJ_MINIMAL)
+	$(CC) -o c64_minimal $(LDFLAGS) $(OBJ_MINIMAL) $(EXTRALIBS) -lm
+
+c64_nops: libc64 $(OBJ_NOPS)
+	$(CC) -o c64_nops $(LDFLAGS) $(OBJ_NOPS) $(EXTRALIBS)
+
+c64_sramtest: libc64 $(OBJ_SRAMTEST)
+	$(CC) -o c64_sramtest $(LDFLAGS) $(OBJ_SRAMTEST) $(EXTRALIBS)
+
+c64_pwrtest: libc64 $(OBJ_PWRTEST)
+	$(CC) -o c64_pwrtest $(LDFLAGS) $(OBJ_PWRTEST) $(EXTRALIBS) -lm
+
+c64_pwrbench: libc64 $(OBJ_PWRBENCH)
+	$(CC) -o c64_pwrbench $(LDFLAGS) $(OBJ_PWRBENCH) $(EXTRALIBS) -lm
+
+c64_reset: libc64 $(OBJ_RESET)
+	$(CC) -o c64_reset $(LDFLAGS) $(OBJ_RESET) $(EXTRALIBS) -lm
+
+
+# debug/dev utilities:
+
+reg_read: libc64 $(OBJ_REGREAD)
+	$(CC) -o reg_read $(LDFLAGS) $(OBJ_REGREAD) $(EXTRALIBS)
+
+reg_write: libc64 $(OBJ_REGWRITE)
+	$(CC) -o reg_write $(LDFLAGS) $(OBJ_REGWRITE) $(EXTRALIBS)
+
+chkmem: $(OBJ_CHKMEM)
+	$(CC) -o chkmem $(LDFLAGS) $(OBJ_CHKMEM) $(EXTRALIBS)
+
+
+
+.c.o:
+	$(CC) $(CFLAGS) $(CFGFLAGS) -c $< -o $@ 
+
+
+clean:
+	$(RM) \
+		$(OBJ_TC) $(OBJ_MINIMAL) $(OBJ_NOPS) $(OBJ_SRAMTEST) $(OBJ_PWRTEST) $(OBJ_PWRBENCH) $(OBJ_RESET) \
+		$(OBJ_REGREAD) $(OBJ_REGWRITE) $(OBJ_CHKMEM) \
+		c64_tc c64_minimal c64_nops c64_sramtest c64_pwrtest c64_pwrbench c64_reset \
+		reg_read reg_write chkmem
+
+
+scp: bin
+	$(SCP) \
+		c64_tc c64_minimal c64_nops c64_sramtest c64_pwrtest c64_pwrbench c64_reset \
+		reg_read reg_write chkmem \
+		$(SCP_USER)@$(SCP_HOST):$(SCP_PATH) 

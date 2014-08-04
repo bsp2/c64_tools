@@ -1,0 +1,1 @@
+cmd_/bsp/pandora/c64_tools/kmod/c64.ko := arm-none-linux-gnueabi-ld -EL -r  -T /bsp/pandora-dev/arm-2011.09/usr/src/pandora-kernel/scripts/module-common.lds --build-id  -o /bsp/pandora/c64_tools/kmod/c64.ko /bsp/pandora/c64_tools/kmod/c64.o /bsp/pandora/c64_tools/kmod/c64.mod.o

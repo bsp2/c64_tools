@@ -1,0 +1,131 @@
+
+pandora:/home/bsp# ./reg_read 48004000
+ 800MHz: read reg[0x48004000] = 0x00000001 (0000 0000 0000 0000 0000 0000 0000 0001)
+ 430MHz: read reg[0x48004000] = 0x00000001 (0000 0000 0000 0000 0000 0000 0000 0001)
+   --> IVA2_CLK is enabled
+
+pandora:/home/bsp# ./reg_read 48004004     ; CM_CLKEN_PLL_IVA2
+ 800MHz: read reg[0x48004004] = 0x00000017 (0000 0000 0000 0000 0000 0000 0001 0111)
+ 430MHz: read reg[0x48004004] = 0x00000017 (0000 0000 0000 0000 0000 0000 0001 0111)
+  --> IVA2 DPLL in lock mode
+  --> IVA2_DPLL_FREQSEL == 1 (reset value) (not documented)
+
+pandora:/home/bsp# ./reg_read 48004040     ; CM_CLKSEL1_PLL_IVA2
+ 800MHz: read reg[0x48004040] = 0x00081400 (0000 0000 0000 1000 0001 0100 0000 0000)
+ 430MHz: read reg[0x48004040] = 0x00081400 (0000 0000 0000 1000 0001 0100 0000 0000)
+   --> IVA2_CLK_SRC: DPLL2_FCLK is CORE_CLK/1  ("selects the IVA_DPLL bypass source clock")
+   --> IVA2_DPLL_MULT is 20
+   --> IVA2_DPLL_DIV is 0 (reset value)
+
+pandora:/home/bsp# ./reg_read 48004044     ; CM_CLKSEL2_PLL_IVA2
+ 800MHz: read reg[0x48004044] = 0x00000001 (0000 0000 0000 0000 0000 0000 0000 0001)
+ 430MHz: read reg[0x48004044] = 0x00000001 (0000 0000 0000 0000 0000 0000 0000 0001)
+   --> IVA2_DPLL_CLKOUT_DIV: DPLL2 CLKOUTX2 divided by 1
+
+pandora:/home/bsp# ./reg_read 48004a40     ; CM_CLKSEL_CORE
+ 800MHz: read reg[0x48004a40] = 0x0000130a (0000 0000 0000 0000 0001 0011 0000 1010)
+ 430MHz: read reg[0x48004a40] = 0x0000130a (0000 0000 0000 0000 0001 0011 0000 1010)
+   --> L3_CLK is CORE_CLK/2
+   --> L4_CLK is L3_CLK/2
+   --> GPTIMER 11 clk is CM_32K_CLK
+   --> GPTIMER 10 clk is CM_32K_CLK
+
+pandora:/home/bsp# ./reg_read 48004904     ; CM_CLKEN_PLL_MPU
+ 800MHz: read reg[0x48004904] = 0x00000037 (0000 0000 0000 0000 0000 0000 0011 0111)
+ 430MHz: read reg[0x48004904] = 0x00000037 (0000 0000 0000 0000 0000 0000 0011 0111)
+   --> MPU_DLL_FREQSEL is 3 (0.75Mhz - 1.0Mhz)
+   --> DPLL1 in lock mode
+
+pandora:/home/bsp# ./reg_read 48004940     ; CM_CLKSEL1_PLL_MPU
+ 800MHz: read reg[0x48004940] = 0x0013e80c (0000 0000 0001 0011 1110 1000 0000 1100)
+ 430MHz: read reg[0x48004940] = 0x0013e80c (0000 0000 0001 0011 1110 1000 0000 1100)
+         read reg[0x48004940] = 0x00144c0c (0000 0000 0001 0100 0100 1100 0000 1100)  1.1Ghz ARM
+   --> MPU_DPLL_DIV is 12 (DPLL1 div)
+   --> MPU_DLL_MULT is 1000
+   --> MPU_CLK_SRC: DPLL1_FCLK is CORE_CLK/2
+
+pandora:/home/bsp# ./reg_read 48004a00     ; CM_FCLKEN1_CORE
+ 800MHz: read reg[0x48004a00] = 0x40006000 (0100 0000 0000 0000 0110 0000 0000 0000)
+ 430MHz: read reg[0x48004a00] = 0x40006000 (0100 0000 0000 0000 0110 0000 0000 0000)
+   --> UART1 functional clock is enabled
+   --> UART2 functional clock is enabled
+   --> MMC3 functional clock is enabled
+
+pandora:/home/bsp# ./reg_read 48004d00     ; CM_CLKEN_PLL
+ 800MHz: read reg[0x48004d00] = 0xf0371037 (1111 0000 0011 0111 0001 0000 0011 0111)
+ 430MHz: read reg[0x48004d00] = 0xf0371037 (1111 0000 0011 0111 0001 0000 0011 0111)
+  --> DPLL3 is in lock mode
+  --> CORE_DPLL_FREQSEL = 3 (0.75Mhz - 1.0Mhz)
+  --> Power down the DPLL3_M3X2 HSDIVIDER path
+  --> DPLL4 is in lock mode
+  --> PERIPH_DPLL_FREQSEL = 3 (0.75MHz - 1.0Mhz)
+  --> PWRDN_TV, PWRDN_DSS1, PWRDN_CAM, PWRDN_EMU_PERIPH
+
+pandora:/home/bsp# ./reg_read 48004d04     ; CM_CLKEN2_PLL
+ 800MHz: read reg[0x48004d04] = 0x00000011 (0000 0000 0000 0000 0000 0000 0001 0001)
+ 430MHz: read reg[0x48004d04] = 0x00000011 (0000 0000 0000 0000 0000 0000 0001 0001)
+  --> second DPLL5 in low power stop mode
+  --> PERIPH2_DPLL_FREQSEL = 1 (reset value), not documented
+
+pandora:/home/bsp# ./reg_read 48004d40     ; CM_CLKSEL1_PLL
+ 800MHz: read reg[0x48004d40] = 0x09900c00 (0000 1001 1001 0000 0000 1100 0000 0000)
+ 430MHz: read reg[0x48004d40] = 0x09900c00 (0000 1001 1001 0000 0000 1100 0000 0000)
+  --> CORE_DPLL_CLKOUT_DIV: DPLL3 output clock is divided by 1
+  --> CORE_DPLL_MULT: DPLL3 multiplier factor is 400
+  --> CORE_DPLL_DIV: DPLL3 divider factor is 12
+
+pandora:/home/bsp# ./reg_read 48004d44     ; CM_CLKSEL2_PLL
+ 800MHz: read reg[0x48004d44] = 0x0483600c (0000 0100 1000 0011 0110 0000 0000 1100)
+ 430MHz: read reg[0x48004d44] = 0x0483600c (0000 0100 1000 0011 0110 0000 0000 1100)
+  --> PERIPH_DLL_MULT: DPLL4 multiplier factor is 864
+  --> DCO_SEL: 8 (undocumented) (lock frequency is comprised between x Mhz and y Mhz)
+  --> PERIPH_DLL_DIV: DPLL4 divider factor is 12
+
+pandora:/home/bsp# ./reg_read 48004d48     ; CM_CLKSEL3_PLL
+ 800MHz: read reg[0x48004d48] = 0x00000009 (0000 0000 0000 0000 0000 0000 0000 1001)
+ 430MHz: read reg[0x48004d48] = 0x00000009 (0000 0000 0000 0000 0000 0000 0000 1001)
+  --> DIV_96M: 96 Mhz clock divider factor M2 is DPLL4 clock divided by 9
+
+pandora:/home/bsp# ./reg_read 48004d4c     ; CM_CLKSEL4_PLL
+ 800MHz: read reg[0x48004d4c] = 0x0000780c (0000 0000 0000 0000 0111 1000 0000 1100)
+ 430MHz: read reg[0x48004d4c] = 0x0000780c (0000 0000 0000 0000 0111 1000 0000 1100
+  --> PERIPH2_DPLL_MULT: DPLL5 multiplier factor is 120
+  --> PERIPH2_DPLL_DIV: DPLL5 divider factor is 12
+
+pandora:/home/bsp# ./reg_read 48004d50     ; CM_CLKSEL5_PLL
+ 800MHz: read reg[0x48004d50] = 0x00000001 (0000 0000 0000 0000 0000 0000 0000 0001)
+ 430MHz: read reg[0x48004d50] = 0x00000001 (0000 0000 0000 0000 0000 0000 0000 0001)
+  --> DIV_120M: 120Mhz clock is DPLL5 clock divided by 1
+
+pandora:/home/bsp# ./reg_read 48004d70     ; CM_CLKOUT_CTRL
+ 800MHz: read reg[0x48004d70] = 0x00000003 (0000 0000 0000 0000 0000 0000 0000 0011)
+ 430MHz: read reg[0x48004d70] = 0x00000003 (0000 0000 0000 0000 0000 0000 0000 0011)
+  --> CLKOUT2_EN: sys_clkout2 is disabled
+  --> CLKOUT2_DIV: sys_clkout2/1
+  --> CLKOUT2SOURCE: source is 54 Mhz clock
+
+pandora:/home/bsp# ./reg_read 48004d24     ; CM_IDLEST_CKGEN
+ 800MHz: read reg[0x48004d24] = 0x00000000 (0000 0000 0000 0000 0000 0000 0000 0000)
+ 430MHz: read reg[0x48004d24] = 0x00000000 (0000 0000 0000 0000 0000 0000 0000 0000)
+  --> DPLL5_M2_CLK is not active
+  --> USB HOST 120M_FCLK is not active
+  --> DPLL5 is bypassed
+
+pandora:/home/bsp# ./reg_read 48004c40     ; CM_CLKSEL_WKUP
+ 800MHz: read reg[0x48004c40] = 0x00000014 (0000 0000 0000 0000 0000 0000 0001 0100)
+ 430MHz: read reg[0x48004c40] = 0x00000014 (0000 0000 0000 0000 0000 0000 0001 0100)
+  --> "reserved for non-GP devices" bits = 2 (reset_value)
+  --> CLKSEL_RM: reset manager clock is L4_CLK / 2
+  --> CLKSEL_GPT1: GPTIMER 1 clock source is 32K_FCLK
+
+pandora:/home/bsp# ./reg_read 48005000     ; CM_FCLKEN_PER
+ 800MHz: read reg[0x48005000] = 0x0006c840 (0000 0000 0000 0110 1100 1000 0100 0000)
+ 430MHz: read reg[0x48005000] = 0x0006c840 (0000 0000 0000 0110 1100 1000 0100 0000)
+  --> EN_GPT5, EN_UART3, EP_GPIO3, EN_GPIO4, EN_GPIO6, EN_UART4
+
+pandora:/home/bsp# ./reg_read 48005010     ; CM_ICLKEN_PER
+ 800MHz: read reg[0x48005010] = 0x0007efff (0000 0000 0000 0111 1110 1111 1111 1111)
+ 430MHz: read reg[0x48005010] = 0x0007efff (0000 0000 0000 0111 1110 1111 1111 1111)
+  --> EN_UART4, EN_GPIO6, EN_GPIO5, EN_GPIO4, EN_GPIO3, EN_GPIO2, EN_UART3,
+      EN_GPT9, EN_GPT8, EN_GPT7, EN_GPT6, EN_GPT5, EN_GPT4, EN_GPT3, EN_GPT3,
+      EN_GPT2, EN_MCBSP4, EN_MCBSP2

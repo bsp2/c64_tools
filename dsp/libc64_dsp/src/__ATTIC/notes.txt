@@ -1,0 +1,63 @@
+
+BIOS: 5_41_04_18
+
+
+1:
+   don't install hwi
+   don't init syscalls / core comp. / logbuf
+   don't dispatch RPCs
+   OPT:none
+
+2:
+   don't install hwi
+   don't dispatch RPCs
+   OPT:none
+
+3: 
+   <move PDCCMD and L1DMPAA writes to top of task__entry()>
+   <postpone HWI_enable() until mbox int. is enabled>
+   <call HWI_disable() but don't do HWI setup and don't reenable HWIs>
+   don't init syscalls / core comp. / logbuf
+   don't dispatch RPCs
+   OPT:none
+
+
+4:
+   <move HWI to main(), remove HWI_enable/disable>
+   <use HWI_enableWugen() instead of direct regwrite>
+   <shuffle order of HWI init steps>
+   <undef ENABLE_IPC_DEBUG>
+   <move PDCCMD and L1DMPAA writes to main>
+   don't init syscalls / core comp. / logbuf
+   don't dispatch RPCs
+   OPT:none
+   ; note: using HWI_enableWugen() solved boot crash
+   
+5:
+   <re-enable init syscalls / core comp. / logbuf>
+   OPT:none
+
+
+6:
+   <re-enable RPC dispatch>
+   <re-enable ENABLE_IPC_DEBUG>
+   OPT:none
+   ; RPCs don't work (timeout)
+
+7:
+   <move HWI init back to task__entry()> 
+   <use WUGEN regwrite again since HWI_enableWugen() is only for 3430>
+
+8:
+   <tried and scrapped C64_plug() instead of HWI_dispatchPlug() -> doesn't work>
+   <same as dummy except for some localvar writes>
+
+
+9:
+   <dummy core with PDCCMD write but no IDLE>
+
+
+10:
+   <dummy core with PDCCMD write but no IDLE, enable L1DMPAA write>
+
+

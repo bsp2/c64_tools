@@ -1,0 +1,31 @@
+#
+# 'demo_calc' DSP example component makefile
+#
+
+include ../../install.mk
+include ../../../scp.mk
+
+
+TARGET_BASENAME=demo_calc
+
+HDR= demo_calc.h
+
+OBJ= \
+	demo_calc.o64
+
+
+OPTFLAGS+= $(OPTFLAGS_NONE)
+#OPTFLAGS+= $(OPTFLAGS_SPEED)
+#OPTFLAGS+= $(OPTFLAGS_SIZE)
+
+
+include ../../build_area2.mk
+
+include ../../build.mk
+
+
+.PHONY: scp
+scp: bin
+	$(SCP) \
+		$(TARGET_BASENAME)*.out \
+		$(SCP_USER)@$(SCP_HOST):$(SCP_PATH)

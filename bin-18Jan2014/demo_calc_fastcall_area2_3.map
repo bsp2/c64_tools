@@ -1,0 +1,177 @@
+******************************************************************************
+               TMS320C6x Linker Unix v7.4.5                    
+******************************************************************************
+>> Linked Fri Jan 17 15:11:49 2014
+
+OUTPUT FILE NAME:   <demo_calc_fastcall_area2_3.out>
+ENTRY POINT SYMBOL: "_c_int00"  address: 86281580
+
+
+MEMORY CONFIGURATION
+
+         name            origin    length      used     unused   attr    fill
+----------------------  --------  ---------  --------  --------  ----  --------
+  L1DSRAM               10f04000   0000c000  00000000  0000c000  RWIX
+  MLB_SYSCALLS          86001000   00001000  000000d8  00000f28  RWIX
+  AREA_COM              86280000   00000040  00000034  0000000c  RWIX
+  AREA_RAM              86280040   0003ffc0  00001680  0003e940  RWIX
+
+
+SECTION ALLOCATION MAP
+
+ output                                  attributes/
+section   page    origin      length       input sections
+--------  ----  ----------  ----------   ----------------
+.vers      0    00000000    00000000     COPY SECTION
+
+.pinit     0    86280040    00000000     UNINITIALIZED
+
+.sec_mlb_syscalls 
+*          0    86001000    000000d8     UNINITIALIZED
+                  86001000    000000d8     demo_calc_fastcall.o64 (.sec_mlb_syscalls)
+
+.sec_com   0    86280000    00000034     UNINITIALIZED
+                  86280000    00000034     demo_calc_fastcall.o64 (.sec_com)
+
+.bss       0    86280040    00000000     UNINITIALIZED
+
+.data      0    86280040    00000000     UNINITIALIZED
+
+.stack     0    86280040    00001000     UNINITIALIZED
+                  86280040    00000008     rts64plus.lib : boot.obj (.stack)
+                  86280048    00000ff8     --HOLE--
+
+.text      0    86281040    00000600     
+                  86281040    00000140     demo_calc_fastcall.o64 (.text)
+                  86281180    000000e0     rts64plus.lib : divi.obj (.text:__divi)
+                  86281260    000000c0                   : autoinit.obj (.text:__auto_init)
+                  86281320    000000c0                   : exit.obj (.text:_exit)
+                  862813e0    000000a0                   : cpy_tbl.obj (.text:_copy_in)
+                  86281480    000000a0                   : memcpy64.obj (.text:_memcpy)
+                  86281520    00000060                   : cpp_init.obj (.text:___TI_cpp_init)
+                  86281580    00000060                   : boot.obj (.text:_c_int00)
+                  862815e0    00000040                   : args_main.obj (.text:__args_main)
+                  86281620    00000020                   : exit.obj (.text:_abort)
+
+.cinit     0    86281640    00000064     
+                  86281640    0000002c     rts64plus.lib : exit.obj (.cinit)
+                  8628166c    00000004     --HOLE-- [fill = 0]
+                  86281670    0000002b     demo_calc_fastcall.o64 (.cinit)
+                  8628169b    00000005     --HOLE-- [fill = 0]
+                  862816a0    00000004     (.pad.cinit) [fill = 0]
+
+.switch    0    862816a4    00000010     
+                  862816a4    00000010     demo_calc_fastcall.o64 (.switch:_loc_exec_fc)
+
+.far       0    862816b4    0000000c     UNINITIALIZED
+                  862816b4    0000000c     rts64plus.lib : exit.obj (.far)
+
+
+GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
+
+address    name
+--------   ----
+86280040   $bss
+86280040   .bss
+86280040   .data
+86281040   .text
+86281620   C$$EXIT
+86280040   GBL_stackbeg
+8628103f   GBL_stackend
+86281038   _HWI_STKBOTTOM
+86280040   _HWI_STKTOP
+86281040   __STACK_END
+00001000   __STACK_SIZE
+00000001   __TI_args_main
+86281520   ___TI_cpp_init
+862816bc   ___TI_enable_exit_profile_output
+ffffffff   ___TI_pprof_out_hndl
+ffffffff   ___TI_prof_data_size
+ffffffff   ___TI_prof_data_start
+ffffffff   ___binit__
+86280040   ___bss__
+ffffffff   ___c_args__
+86281640   ___cinit__
+86280040   ___data__
+86280040   ___edata__
+86280040   ___end__
+86281640   ___etext__
+ffffffff   ___pinit__
+86281040   ___text__
+862815e0   __args_main
+86281260   __auto_init
+86281180   __c6xabi_divi
+862816b4   __cleanup_ptr
+86281180   __divi
+862816b8   __dtors_ptr
+86280040   __stack
+86281620   _abort
+86281580   _c_int00
+86280000   _component_demo_calc_fastcall
+862813e0   _copy_in
+86281320   _exit
+86281170   _main
+86281480   _memcpy
+86001000   _syscalls
+ffffffff   binit
+86281640   cinit
+86280040   edata
+86280040   end
+86281640   etext
+ffffffff   pinit
+
+
+GLOBAL SYMBOLS: SORTED BY Symbol Address 
+
+address    name
+--------   ----
+00000001   __TI_args_main
+00001000   __STACK_SIZE
+86001000   _syscalls
+86280000   _component_demo_calc_fastcall
+86280040   $bss
+86280040   .bss
+86280040   .data
+86280040   GBL_stackbeg
+86280040   _HWI_STKTOP
+86280040   ___bss__
+86280040   ___data__
+86280040   ___edata__
+86280040   ___end__
+86280040   __stack
+86280040   edata
+86280040   end
+86281038   _HWI_STKBOTTOM
+8628103f   GBL_stackend
+86281040   .text
+86281040   __STACK_END
+86281040   ___text__
+86281170   _main
+86281180   __c6xabi_divi
+86281180   __divi
+86281260   __auto_init
+86281320   _exit
+862813e0   _copy_in
+86281480   _memcpy
+86281520   ___TI_cpp_init
+86281580   _c_int00
+862815e0   __args_main
+86281620   C$$EXIT
+86281620   _abort
+86281640   ___cinit__
+86281640   ___etext__
+86281640   cinit
+86281640   etext
+862816b4   __cleanup_ptr
+862816b8   __dtors_ptr
+862816bc   ___TI_enable_exit_profile_output
+ffffffff   ___TI_pprof_out_hndl
+ffffffff   ___TI_prof_data_size
+ffffffff   ___TI_prof_data_start
+ffffffff   ___binit__
+ffffffff   ___c_args__
+ffffffff   ___pinit__
+ffffffff   binit
+ffffffff   pinit
+
+[48 symbols]

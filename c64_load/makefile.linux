@@ -1,0 +1,33 @@
+#
+# c64_tools 'c64_load' makefile
+#
+
+include ../install.mk
+
+TARGET=c64_load
+
+#CFLAGS += -g
+CFLAGS += -O2
+
+EXTRALIBS += -L../libc64 -lc64
+
+
+OBJ= \
+	main.o
+
+
+.phony: libc64
+libc64:
+	$(MAKE) -C ../libc64 -f makefile.linux bin
+
+
+bin: $(OBJ) libc64
+	$(CC) -o $(TARGET) $(LDFLAGS) $(OBJ) $(EXTRALIBS)
+
+
+.c.o:
+	$(CC) $(CFLAGS) $(CFGFLAGS) -c $< -o $@ 
+
+
+clean:
+	$(RM) $(OBJ) $(TARGET)

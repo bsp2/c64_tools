@@ -1,0 +1,194 @@
+******************************************************************************
+               TMS320C6x Linker Unix v7.4.5                    
+******************************************************************************
+>> Linked Fri Jan 17 15:11:49 2014
+
+OUTPUT FILE NAME:   <test_logbuf_area2_2.out>
+ENTRY POINT SYMBOL: "_c_int00"  address: 86241700
+
+
+MEMORY CONFIGURATION
+
+         name            origin    length      used     unused   attr    fill
+----------------------  --------  ---------  --------  --------  ----  --------
+  L1DSRAM               10f04000   0000c000  00000000  0000c000  RWIX
+  MLB_SYSCALLS          86001000   00001000  000000d8  00000f28  RWIX
+  AREA_COM              86240000   00000040  00000034  0000000c  RWIX
+  AREA_RAM              86240040   0003ffc0  00001942  0003e67e  RWIX
+
+
+SECTION ALLOCATION MAP
+
+ output                                  attributes/
+section   page    origin      length       input sections
+--------  ----  ----------  ----------   ----------------
+.vers      0    00000000    00000000     COPY SECTION
+
+.pinit     0    86240040    00000000     UNINITIALIZED
+
+.sec_mlb_syscalls 
+*          0    86001000    000000d8     UNINITIALIZED
+                  86001000    000000d8     test_logbuf.o64 (.sec_mlb_syscalls)
+
+.sec_com   0    86240000    00000034     UNINITIALIZED
+                  86240000    00000034     test_logbuf.o64 (.sec_com)
+
+.bss       0    86240040    00000000     UNINITIALIZED
+
+.data      0    86240040    00000000     UNINITIALIZED
+
+.stack     0    86240040    00001000     UNINITIALIZED
+                  86240040    00000008     rts64plus.lib : boot.obj (.stack)
+                  86240048    00000ff8     --HOLE--
+
+.text      0    86241040    000007c0     
+                  86241040    000002c0     test_logbuf.o64 (.text)
+                  86241300    000000e0     fastrts64x.lib : addsp.obj (.text)
+                  862413e0    000000c0     rts64plus.lib : autoinit.obj (.text:__auto_init)
+                  862414a0    000000c0                   : exit.obj (.text:_exit)
+                  86241560    000000a0                   : cpy_tbl.obj (.text:_copy_in)
+                  86241600    000000a0                   : memcpy64.obj (.text:_memcpy)
+                  862416a0    00000060                   : cpp_init.obj (.text:___TI_cpp_init)
+                  86241700    00000060                   : boot.obj (.text:_c_int00)
+                  86241760    00000040                   : args_main.obj (.text:__args_main)
+                  862417a0    00000040     fastrts64x.lib : spdp.obj (.text)
+                  862417e0    00000020     rts64plus.lib : exit.obj (.text:_abort)
+
+.const     0    86241800    000000d6     
+                  86241800    000000d6     test_logbuf.o64 (.const:.string)
+
+.cinit     0    862418d8    0000007c     
+                  862418d8    00000044     test_logbuf.o64 (.cinit)
+                  8624191c    00000004     --HOLE-- [fill = 0]
+                  86241920    0000002c     rts64plus.lib : exit.obj (.cinit)
+                  8624194c    00000004     --HOLE-- [fill = 0]
+                  86241950    00000004     (.pad.cinit) [fill = 0]
+
+.switch    0    86241954    0000001c     
+                  86241954    0000001c     test_logbuf.o64 (.switch:_loc_exec)
+
+.far       0    86241970    00000014     UNINITIALIZED
+                  86241970    0000000c     rts64plus.lib : exit.obj (.far)
+                  8624197c    00000008     test_logbuf.o64 (.far)
+
+
+GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
+
+address    name
+--------   ----
+86240040   $bss
+86240040   .bss
+86240040   .data
+86241040   .text
+862417e0   C$$EXIT
+86240040   GBL_stackbeg
+8624103f   GBL_stackend
+86241038   _HWI_STKBOTTOM
+86240040   _HWI_STKTOP
+86241040   __STACK_END
+00001000   __STACK_SIZE
+00000001   __TI_args_main
+862416a0   ___TI_cpp_init
+86241978   ___TI_enable_exit_profile_output
+ffffffff   ___TI_pprof_out_hndl
+ffffffff   ___TI_prof_data_size
+ffffffff   ___TI_prof_data_start
+ffffffff   ___binit__
+86240040   ___bss__
+ffffffff   ___c_args__
+862418d8   ___cinit__
+86240040   ___data__
+86240040   ___edata__
+86240040   ___end__
+86241800   ___etext__
+ffffffff   ___pinit__
+86241040   ___text__
+86241310   __addf
+86241760   __args_main
+862413e0   __auto_init
+86241970   __cleanup_ptr
+862417a0   __cvtfd
+86241974   __dtors_ptr
+86240040   __stack
+86241300   __subf
+862417e0   _abort
+86241310   _addsp
+86241700   _c_int00
+86241980   _cnt_f
+8624197c   _cnt_i
+86240000   _component_test_logbuf
+86241560   _copy_in
+862414a0   _exit
+862412f0   _main
+86241600   _memcpy
+862417a0   _spdp
+86241300   _subsp
+86001000   _syscalls
+ffffffff   binit
+862418d8   cinit
+86240040   edata
+86240040   end
+86241800   etext
+ffffffff   pinit
+
+
+GLOBAL SYMBOLS: SORTED BY Symbol Address 
+
+address    name
+--------   ----
+00000001   __TI_args_main
+00001000   __STACK_SIZE
+86001000   _syscalls
+86240000   _component_test_logbuf
+86240040   $bss
+86240040   .bss
+86240040   .data
+86240040   GBL_stackbeg
+86240040   _HWI_STKTOP
+86240040   ___bss__
+86240040   ___data__
+86240040   ___edata__
+86240040   ___end__
+86240040   __stack
+86240040   edata
+86240040   end
+86241038   _HWI_STKBOTTOM
+8624103f   GBL_stackend
+86241040   .text
+86241040   __STACK_END
+86241040   ___text__
+862412f0   _main
+86241300   __subf
+86241300   _subsp
+86241310   __addf
+86241310   _addsp
+862413e0   __auto_init
+862414a0   _exit
+86241560   _copy_in
+86241600   _memcpy
+862416a0   ___TI_cpp_init
+86241700   _c_int00
+86241760   __args_main
+862417a0   __cvtfd
+862417a0   _spdp
+862417e0   C$$EXIT
+862417e0   _abort
+86241800   ___etext__
+86241800   etext
+862418d8   ___cinit__
+862418d8   cinit
+86241970   __cleanup_ptr
+86241974   __dtors_ptr
+86241978   ___TI_enable_exit_profile_output
+8624197c   _cnt_i
+86241980   _cnt_f
+ffffffff   ___TI_pprof_out_hndl
+ffffffff   ___TI_prof_data_size
+ffffffff   ___TI_prof_data_start
+ffffffff   ___binit__
+ffffffff   ___c_args__
+ffffffff   ___pinit__
+ffffffff   binit
+ffffffff   pinit
+
+[54 symbols]

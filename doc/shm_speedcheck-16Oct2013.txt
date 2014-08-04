@@ -1,0 +1,73 @@
+pandora:/home/bsp# cat test_shm.sh 
+dmesg -c
+
+./go64.sh; dmesg -c
+
+./c64_tc 11; dmesg -c
+
+./c64_tc 12; dmesg -c
+
+./c64_tc 13; dmesg -c
+
+pandora:/home/bsp# . ./test_shm.sh 
+ 
+go64.sh: ARGS="" DSPIMAGE="./core.out"
+[...] loading DSP image from "./core.out"
+[...] reading 68 section headers....................................................................
+[...] dsp_autoresume_set: autoresume is now disabled.
+[...] initializing DSP memory and copying sections..
+[...]  text=0x0000b140  data=0x00001607  bss=0x0007fd6c
+[...] DSP image loaded successfully. starting DSP..
+[dbg] waiting for DSP startup..
+[...] DSP is up and running!
+[35227.288421] c64::dsp_poweroff: IVA2_PRM_PWSTST=0x00000000 => DSP is OFF
+[35227.290039] c64: exit OK.
+[35227.349700] c64: init ok. module build date: Oct 16 2013  (**4MB DSP image size**)
+[35227.617614] c64::dev::ioctl: starting DSP @0x86050ea0
+[35227.891937] c64::dsp_poweroff: IVA2_PRM_PWSTST=0x00000000 => DSP is OFF
+[...] selected testcase 11 ("TC_SHM_CACHE_NONE")
+[...] coff_load_overlay: text=0x000005a0  data=0x0000006c  bss=0x000010dc
+[...] coff_load_overlay: text=0x000004c0  data=0x00000064  bss=0x000010dc
+[...] coff_load_overlay: text=0x00000600  data=0x00000074  bss=0x000010dc
+[...] loc_tc_shm_speedcheck: fill paged mem.......................done: 100 * 8192 kbytes in 564 ms => 1418.440 MBytes/sec
+[...] loc_tc_shm_speedcheck: fill contiguous mem..................done: 100 * 8192 kbytes in 21178 ms => 37.775 MBytes/sec
+[...] loc_tc_shm_speedcheck: copy paged to paged mem..............done: 100 * 8192 kbytes in 554 ms => 1444.043 MBytes/sec
+[...] loc_tc_shm_speedcheck: copy contiguous to contiguous mem....done: 100 * 8192 kbytes in 25801 ms => 31.007 MBytes/sec
+[...] loc_tc_shm_speedcheck: copy contiguous to paged mem.........done: 100 * 8192 kbytes in 16317 ms => 49.029 MBytes/sec
+[...] loc_tc_shm_speedcheck: copy paged to contiguous mem.........done: 100 * 8192 kbytes in 11886 ms => 67.306 MBytes/sec
+[35227.926818] xxx c64::dev::ioctl: SHM_ALLOC req.type=0
+[35227.948730] xxx c64::dev::mmap: shm OLD vm_page_prot=0x0000030f
+[35227.948760] xxx c64::dev::mmap: shm DSP_CACHE_NONE
+[35227.948760] xxx c64::dev::mmap: shm NEW vm_page_prot=0x00000303
+[35304.311126] c64::dsp_poweroff: IVA2_PRM_PWSTST=0x00000000 => DSP is OFF
+[...] selected testcase 12 ("TC_SHM_CACHE_RW")
+[...] coff_load_overlay: text=0x000005a0  data=0x0000006c  bss=0x000010dc
+[...] coff_load_overlay: text=0x000004c0  data=0x00000064  bss=0x000010dc
+[...] coff_load_overlay: text=0x00000600  data=0x00000074  bss=0x000010dc
+[...] loc_tc_shm_speedcheck: fill paged mem.......................done: 100 * 8192 kbytes in 557 ms => 1436.266 MBytes/sec
+[...] loc_tc_shm_speedcheck: fill contiguous mem..................done: 100 * 8192 kbytes in 547 ms => 1462.523 MBytes/sec
+[...] loc_tc_shm_speedcheck: copy paged to paged mem..............done: 100 * 8192 kbytes in 554 ms => 1444.043 MBytes/sec
+[...] loc_tc_shm_speedcheck: copy contiguous to contiguous mem....done: 100 * 8192 kbytes in 2238 ms => 357.462 MBytes/sec
+[...] loc_tc_shm_speedcheck: copy contiguous to paged mem.........done: 100 * 8192 kbytes in 1939 ms => 412.584 MBytes/sec
+[...] loc_tc_shm_speedcheck: copy paged to contiguous mem.........done: 100 * 8192 kbytes in 2518 ms => 317.712 MBytes/sec
+[35304.344238] xxx c64::dev::ioctl: SHM_ALLOC req.type=1
+[35304.365447] xxx c64::dev::mmap: shm OLD vm_page_prot=0x0000030f
+[35304.365478] xxx c64::dev::mmap: shm DSP_CACHE_RW
+[35304.365478] xxx c64::dev::mmap: shm NEW vm_page_prot=0x0000030f
+[35312.783691] c64::dsp_poweroff: IVA2_PRM_PWSTST=0x00000000 => DSP is OFF
+[...] selected testcase 13 ("TC_SHM_CACHE_R")
+[...] coff_load_overlay: text=0x000005a0  data=0x0000006c  bss=0x000010dc
+[...] coff_load_overlay: text=0x000004c0  data=0x00000064  bss=0x000010dc
+[...] coff_load_overlay: text=0x00000600  data=0x00000074  bss=0x000010dc
+[...] loc_tc_shm_speedcheck: fill paged mem.......................done: 100 * 8192 kbytes in 553 ms => 1446.655 MBytes/sec
+[...] loc_tc_shm_speedcheck: fill contiguous mem..................done: 100 * 8192 kbytes in 546 ms => 1465.201 MBytes/sec
+[...] loc_tc_shm_speedcheck: copy paged to paged mem..............done: 100 * 8192 kbytes in 557 ms => 1436.266 MBytes/sec
+[...] loc_tc_shm_speedcheck: copy contiguous to contiguous mem....done: 100 * 8192 kbytes in 2233 ms => 358.262 MBytes/sec
+[...] loc_tc_shm_speedcheck: copy contiguous to paged mem.........done: 100 * 8192 kbytes in 1932 ms => 414.079 MBytes/sec
+[...] loc_tc_shm_speedcheck: copy paged to contiguous mem.........done: 100 * 8192 kbytes in 2528 ms => 316.456 MBytes/sec
+[35312.816131] xxx c64::dev::ioctl: SHM_ALLOC req.type=2
+[35312.837341] xxx c64::dev::mmap: shm OLD vm_page_prot=0x0000030f
+[35312.837371] xxx c64::dev::mmap: shm DSP_CACHE_R
+[35312.837371] xxx c64::dev::mmap: shm NEW vm_page_prot=0x0000030b
+[35321.252258] c64::dsp_poweroff: IVA2_PRM_PWSTST=0x00000000 => DSP is OFF
+pandora:/home/bsp# 

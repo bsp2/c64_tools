@@ -1,0 +1,173 @@
+******************************************************************************
+               TMS320C6x Linker Unix v7.4.5                    
+******************************************************************************
+>> Linked Fri Jan 17 15:11:49 2014
+
+OUTPUT FILE NAME:   <demo_checksum_area2_2.out>
+ENTRY POINT SYMBOL: "_c_int00"  address: 86241b60
+
+
+MEMORY CONFIGURATION
+
+         name            origin    length      used     unused   attr    fill
+----------------------  --------  ---------  --------  --------  ----  --------
+  L1DSRAM               10f04000   0000c000  00000000  0000c000  RWIX
+  MLB_SYSCALLS          86001000   00001000  000000d8  00000f28  RWIX
+  AREA_COM              86240000   00000040  00000034  0000000c  RWIX
+  AREA_RAM              86240040   0003ffc0  00001c80  0003e340  RWIX
+
+
+SECTION ALLOCATION MAP
+
+ output                                  attributes/
+section   page    origin      length       input sections
+--------  ----  ----------  ----------   ----------------
+.vers      0    00000000    00000000     COPY SECTION
+
+.pinit     0    86240040    00000000     UNINITIALIZED
+
+.sec_mlb_syscalls 
+*          0    86001000    000000d8     UNINITIALIZED
+                  86001000    000000d8     demo_checksum.o64 (.sec_mlb_syscalls)
+
+.sec_com   0    86240000    00000034     UNINITIALIZED
+                  86240000    00000034     demo_checksum.o64 (.sec_com)
+
+.bss       0    86240040    00000000     UNINITIALIZED
+
+.data      0    86240040    00000000     UNINITIALIZED
+
+.stack     0    86240040    00001000     UNINITIALIZED
+                  86240040    00000008     rts64plus.lib : boot.obj (.stack)
+                  86240048    00000ff8     --HOLE--
+
+.text      0    86241040    00000be0     
+                  86241040    00000800     demo_checksum.o64 (.text)
+                  86241840    000000c0     rts64plus.lib : autoinit.obj (.text:__auto_init)
+                  86241900    000000c0                   : exit.obj (.text:_exit)
+                  862419c0    000000a0                   : cpy_tbl.obj (.text:_copy_in)
+                  86241a60    000000a0                   : memcpy64.obj (.text:_memcpy)
+                  86241b00    00000060                   : cpp_init.obj (.text:___TI_cpp_init)
+                  86241b60    00000060                   : boot.obj (.text:_c_int00)
+                  86241bc0    00000040                   : args_main.obj (.text:__args_main)
+                  86241c00    00000020                   : exit.obj (.text:_abort)
+
+.cinit     0    86241c20    0000006c     
+                  86241c20    00000036     demo_checksum.o64 (.cinit)
+                  86241c56    00000002     --HOLE-- [fill = 0]
+                  86241c58    0000002c     rts64plus.lib : exit.obj (.cinit)
+                  86241c84    00000004     --HOLE-- [fill = 0]
+                  86241c88    00000004     (.pad.cinit) [fill = 0]
+
+.switch    0    86241c8c    00000024     
+                  86241c8c    00000024     demo_checksum.o64 (.switch:_loc_exec)
+
+.far       0    86241cb0    00000010     UNINITIALIZED
+                  86241cb0    0000000c     rts64plus.lib : exit.obj (.far)
+                  86241cbc    00000004     demo_checksum.o64 (.far)
+
+
+GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
+
+address    name
+--------   ----
+86240040   $bss
+86240040   .bss
+86240040   .data
+86241040   .text
+86241c00   C$$EXIT
+86240040   GBL_stackbeg
+8624103f   GBL_stackend
+86241038   _HWI_STKBOTTOM
+86240040   _HWI_STKTOP
+86241040   __STACK_END
+00001000   __STACK_SIZE
+00000001   __TI_args_main
+86241b00   ___TI_cpp_init
+86241cb8   ___TI_enable_exit_profile_output
+ffffffff   ___TI_pprof_out_hndl
+ffffffff   ___TI_prof_data_size
+ffffffff   ___TI_prof_data_start
+ffffffff   ___binit__
+86240040   ___bss__
+ffffffff   ___c_args__
+86241c20   ___cinit__
+86240040   ___data__
+86240040   ___edata__
+86240040   ___end__
+86241c20   ___etext__
+ffffffff   ___pinit__
+86241040   ___text__
+86241bc0   __args_main
+86241840   __auto_init
+86241cb0   __cleanup_ptr
+86241cb4   __dtors_ptr
+86240040   __stack
+86241c00   _abort
+86241b60   _c_int00
+86240000   _component_demo_checksum
+862419c0   _copy_in
+86241900   _exit
+86241834   _main
+86241a60   _memcpy
+86001000   _syscalls
+ffffffff   binit
+86241c20   cinit
+86240040   edata
+86240040   end
+86241c20   etext
+ffffffff   pinit
+
+
+GLOBAL SYMBOLS: SORTED BY Symbol Address 
+
+address    name
+--------   ----
+00000001   __TI_args_main
+00001000   __STACK_SIZE
+86001000   _syscalls
+86240000   _component_demo_checksum
+86240040   $bss
+86240040   .bss
+86240040   .data
+86240040   GBL_stackbeg
+86240040   _HWI_STKTOP
+86240040   ___bss__
+86240040   ___data__
+86240040   ___edata__
+86240040   ___end__
+86240040   __stack
+86240040   edata
+86240040   end
+86241038   _HWI_STKBOTTOM
+8624103f   GBL_stackend
+86241040   .text
+86241040   __STACK_END
+86241040   ___text__
+86241834   _main
+86241840   __auto_init
+86241900   _exit
+862419c0   _copy_in
+86241a60   _memcpy
+86241b00   ___TI_cpp_init
+86241b60   _c_int00
+86241bc0   __args_main
+86241c00   C$$EXIT
+86241c00   _abort
+86241c20   ___cinit__
+86241c20   ___etext__
+86241c20   cinit
+86241c20   etext
+86241cb0   __cleanup_ptr
+86241cb4   __dtors_ptr
+86241cb8   ___TI_enable_exit_profile_output
+ffffffff   ___TI_pprof_out_hndl
+ffffffff   ___TI_prof_data_size
+ffffffff   ___TI_prof_data_start
+ffffffff   ___binit__
+ffffffff   ___c_args__
+ffffffff   ___pinit__
+ffffffff   binit
+ffffffff   pinit
+
+[46 symbols]

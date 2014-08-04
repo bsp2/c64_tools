@@ -1,0 +1,23 @@
+include ../install.mk
+
+
+TARGET_BASENAME=core
+
+XDC_CFG=core
+
+OBJ= \
+	../../src/arch/dm3730/dsp_config.o64			\
+	main.o64
+
+#OPTFLAGS+= $(OPTFLAGS_NONE)
+OPTFLAGS+= $(OPTFLAGS_SPEED)
+
+#INC+= -I"../libc64p_dsp/include"
+
+LIB+= -l"../libc64_dsp/libc64.a64"
+#LIB+= -l"../components/demo_fractal/demo_fractal.a64"
+
+
+include ../build_core.mk
+
+include ../build.mk

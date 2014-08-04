@@ -1,0 +1,61 @@
+#
+# c64_tools 'libc64' makefile
+#
+
+include ../install.mk
+
+TARGET_BASENAME=libc64
+
+TARGET_SHARED=$(TARGET_BASENAME).so
+TARGET_STATIC=$(TARGET_BASENAME).a
+
+TARGET_SHARED_VERSION=1
+
+#CFLAGS += -g
+CFLAGS += -O2
+
+EXTRALIBS += -lpthread
+
+
+OBJ= \
+	dsp.o \
+	../src/log.o \
+	dl_malloc.o
+
+
+COFF_OBJ= \
+	  ../src/coff.o \
+	  ../src/coff_overlay.o
+
+
+ARCH_OBJ= \
+	  ../src/arch/dm3730/dsp_config.o
+
+
+OSAL_OBJ= \
+	  ../src/osal/osal.o \
+	  ../src/osal/linux/osal_linux.o
+
+
+ALL_OBJ= $(OBJ) $(COFF_OBJ) $(ARCH_OBJ) $(OSAL_OBJ) 
+
+
+bin_shared: $(ALL_OBJ)
+#	$(CC) -shared -o "$(TARGET_SHARED)" -Wl,-soname,$(TARGET_SHARED) $(LDFLAGS) $(ALL_OBJ) $(EXTRALIBS)
+#	mv $(TARGET_SHARED) $(TARGET_SHARED).$(TARGET_SHARED_VERSION)
+	$(CC) -shared -o "$(TARGET_SHARED).$(TARGET_SHARED_VERSION)" -Wl,-soname,$(TARGET_SHARED).$(TARGET_SHARED_VERSION) $(LDFLAGS) $(ALL_OBJ) $(EXTRALIBS)
+	$(RM) $(TARGET_SHARED)
+	ln -s $(TARGET_SHARED).$(TARGET_SHARED_VERSION) $(TARGET_SHARED)
+
+bin_static: $(ALL_OBJ)
+	$(RM) $(TARGET_STATIC)
+	$(AR) r $(TARGET_STATIC) $(ALL_OBJ)
+
+bin: bin_shared bin_static
+
+.c.o:
+	$(CC) $(CFLAGS) $(CFGFLAGS) -c $< -o $@ 
+
+clean:
+	$(RM) $(ALL_OBJ) $(TARGET_SHARED) $(TARGET_SHARED).$(TARGET_SHARED_VERSION) $(TARGET_STATIC)
+

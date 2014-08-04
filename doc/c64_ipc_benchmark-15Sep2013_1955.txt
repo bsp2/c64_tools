@@ -1,0 +1,35 @@
+pandora:/home/bsp# ./go64.sh ; dmesg -c
+ 
+go64.sh: ARGS="" DSPIMAGE="./c64p_simple_dm3730.out"
+[...] loading DSP image from "./c64p_simple_dm3730.out"
+[dbg] coff_open: file size=212637 (0x00033e9d)
+[...] reading 52 section headers....................................................
+[...] initializing DSP memory and copying sections..
+[...]  text=0x00006080  data=0x000012df  bss=0x00704368
+[...] DSP image loaded successfully. starting DSP..
+[dbg] waiting for DSP startup..
+[...] DSP is up and running!
+[  245.220794] c64: init ok. module build date: Sep 15 2013
+pandora:/home/bsp# ./test_hello ; dmesg -c
+[dbg] DSP numRead=4, debug=0x07000002
+[...] write testmsg: 4 bytes written.
+[dbg] DSP numRead=4, debug=0x37010007
+pandora:/home/bsp# ./test_hello q; dmesg -c
+[dbg] DSP numRead=4, debug=0x37010007
+[dbg] DSP numRead=4, debug=0x77005707
+[...] log_rpc() OK: result=87 (expected 87)
+[dbg] DSP numRead=4, debug=0x77005707
+pandora:/home/bsp# ./test_hello q l; dmesg -c
+[dbg] DSP numRead=4, debug=0x77005707
+[...] starting calibration
+[...] starting benchmark
+[...] benchmark finished. => 1000000 iterations in 296173 millisecs.
+pandora:/home/bsp# 
+
+
+Configuration:
+
+  [x] VID2 hack (uses VID scaler regs as msgbuf)
+  [x] flush_cache_all()
+  [x] DSP L1D
+  [ ] DSP L2D

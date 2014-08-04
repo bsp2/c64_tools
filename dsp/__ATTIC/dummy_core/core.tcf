@@ -1,0 +1,40 @@
+
+var isCore = true;
+
+utils.importFile("assert.tci");
+
+utils.importFile("../tci/platform.tci");
+
+bios.LOG.create("trace");
+
+bios.enableTskManager(prog);
+
+//////bios.setMemCodeSections (prog, DDR);
+//////bios.setMemDataNoHeapSections (prog, DDR);
+//////bios.setMemDataHeapSections (prog, DDR);
+
+//////prog.module("MEM").BIOSSEG    = prog.get("IRAM");
+//////prog.module("MEM").TEXTSEG    = DDR;
+
+var comSeg = DDR2;
+
+utils.importFile("../tci/bios.tci");
+
+
+// bios.PRD.create("prd0");
+// bios.PRD.instance("prd0").order = 1;
+// bios.PRD.instance("prd0").period = 10;
+// bios.PRD.instance("prd0").fxn = prog.extern("periodicSemPostFunc");
+
+bios.HWI.instance("HWI_INT4").fxn = prog.extern("mlb_int_handler");
+bios.HWI.instance("HWI_INT4").useDispatcher = 1;
+bios.HWI.instance("HWI_INT4").interruptSelectNumber = 55;
+bios.HWI.instance("HWI_INT4").fxn = prog.extern("mlb_irq_handler");
+bios.HWI.instance("HWI_INT4").interruptSelectNumber = 0;
+bios.HWI.instance("HWI_INT4").fxn = prog.extern("HW_unused", "asm");
+bios.HWI.instance("HWI_INT4").interruptSelectNumber = 4;
+bios.HWI.instance("HWI_INT4").fxn = prog.extern("HWI_unused", "asm");
+
+// !GRAPHICAL_CONFIG_TOOL_SCRIPT_INSERT_POINT!
+
+prog.gen();

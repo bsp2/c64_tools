@@ -1,0 +1,25 @@
+pandora2:/home/bsp/old# ./c64_tc 3
+[...] selected testcase 3 ("TC_RPC_ADD_BENCHMARK")
+[...] coff_load_overlay: text=0x000005a0  data=0x0000006c  bss=0x000010dc
+[...] coff_load_overlay: text=0x00000620  data=0x0000006c  bss=0x00001114
+[...] coff_load_overlay: text=0x00000600  data=0x00000074  bss=0x00001110
+[...] starting benchmark
+[...] benchmark finished. => 100000 iterations in 2848 millisecs.
+
+==> 0.02848 millseconds per remote procedure call (roundtrip) 
+ ==> ~35112 calls per second
+
+pandora2:/home/bsp/old# ./c64_tc 6
+[...] selected testcase 6 ("TC_FASTCALL_RPC_ADD")
+[...] coff_load_overlay: text=0x000005a0  data=0x0000006c  bss=0x000010dc
+[...] coff_load_overlay: text=0x00000620  data=0x0000006c  bss=0x00001114
+[...] coff_load_overlay: text=0x00000600  data=0x00000074  bss=0x00001110
+[...] starting fastcall benchmark
+[...] loc_tc_rpc_add_fastcall_benchmark: init rpc sent, r=0
+[...] fastcall benchmark finished. => 1000000 iterations in 1614 millisecs.
+
+==> 0.001614 milliseconds per remote procedure call (roundtrip)
+ ==> ~619578 calls per second (10326 calls per 60Hz video frame, )
+
+pandora2:/home/bsp/old# cat /proc/pandora/dsp_mhz_max 
+800

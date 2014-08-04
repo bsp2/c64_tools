@@ -1,0 +1,32 @@
+#
+# 'test_qdma' DSP example component makefile
+#
+
+include ../../install.mk
+include ../../../scp.mk
+
+
+TARGET_BASENAME=test_qdma
+
+HDR= test_qdma.h
+
+OBJ= \
+	test_qdma.o64
+
+
+#OPTFLAGS+= $(OPTFLAGS_NONE)
+#OPTFLAGS+= $(OPTFLAGS_NONE_INTERLIST)
+#OPTFLAGS+= $(OPTFLAGS_SPEED)
+OPTFLAGS+= $(OPTFLAGS_SIZE)
+
+
+include ../../build_area2.mk
+
+include ../../build.mk
+
+
+.PHONY: scp
+scp: bin
+	$(SCP) \
+		$(TARGET_BASENAME)*.out \
+		$(SCP_USER)@$(SCP_HOST):$(SCP_PATH)

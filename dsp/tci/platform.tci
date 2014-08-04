@@ -1,0 +1,71 @@
+
+utils.importFile("config.tci");
+
+utils.importFile("dm3730.tci");
+
+
+
+/*  ============================================================================
+ *  MEM
+ *  ============================================================================
+ */
+prog.module("MEM").STACKSIZE = 0x1000 ;
+
+
+/*  ============================================================================
+ *  DSP/BIOS 
+ *  ============================================================================
+ */
+bios.enableMemoryHeaps(prog);
+prog.module("GBL").ENABLEALLTRC    = false ;
+prog.module("GBL").PROCID          = 0 ;
+bios.GBL.CALLUSERINITFXN = 0;
+bios.MSGQ.ENABLEMSGQ = 0;
+bios.POOL.ENABLEPOOL = 0;
+
+
+/*  ============================================================================
+ *  MEM: RESET_VECTOR
+ *  ============================================================================
+ */
+
+/*
+ * this cfg. uses 4MBytes for DSP @0x86000000
+ *
+ */
+
+if(isCore)
+{
+   print("creating RESET_VECTOR");
+
+   var RESET_VECTOR = prog.module("MEM").create("RESET_VECTOR");
+   RESET_VECTOR.base        = DSP_BASE;
+   RESET_VECTOR.len         = DSP_RESET_SIZE; // actually 0x80 bytes, the rest is used for messaging/test code
+   RESET_VECTOR.space       = "code/data";
+   //RESET_VECTOR.createHeap  = true;
+   RESET_VECTOR.heapSize    = 0x00000000;
+   RESET_VECTOR.comment     = "RESET_VECTOR";
+}
+
+
+/*  ============================================================================
+ *  MEM : DDR2
+ *  ============================================================================
+ *
+ * CODEMEM/heap starts directly after RESET area
+ */
+if(isCore)
+{
+   print("creating DDR2");
+
+   var DDR2 = prog.module("MEM").create("DDR2");
+   DDR2.base             = DSP_BASE + DSP_RESET_SIZE + DSP_SYSCALLS_SIZE + DSP_LOGBUF_SIZE + 4;
+   DDR2.len              = DSP_CORE_SIZE - DSP_RESET_SIZE - DSP_SYSCALLS_SIZE - DSP_LOGBUF_SIZE - 4; // 2024 KBytes
+   DDR2.space            = "code/data";
+   DDR2.createHeap       = true;
+   DDR2.heapSize         = 0x00040000; // 256k KBytes => 1772kbytes left for DSP image
+   DDR2.comment          = "DDR2";
+}
+
+
+utils.importFile("areas.tci");

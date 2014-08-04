@@ -1,0 +1,49 @@
+
+class Gen {
+   String sec;
+
+   genCmd(String _name, Integer _base, Integer _size) {
+      String buf =
+         "MEMORY {\n"
+         "   AREA_COM : origin = "+_base.printf("0x%08x")+", len = 0x40\n"
+         "   AREA_RAM : origin = "+((_base + 0x40).printf("0x%08x"))+", len = "+((_size - 0x40).printf("0x%08x"))+"\n"
+         "}\n"
+         ;
+
+      buf.saveLocal(_name);
+      trace "wrote \""+_name+"\"";
+   }
+
+   genSec(String _name, Integer _base, Integer _size) {
+      sec.append("   { "+_base.printf("0x%08xu")+", 0, "+_size.printf("0x%08xu")+" }, /* "+_name+" */\n");
+   }
+
+   gen() {
+      int cBase  = DSP_BASE + DSP_CORE_SIZE;
+      int areaNr = 1;
+
+      sec = "static const dsp_mem_region_t overlay_sections[MLB_COM_NUM_SECTION_INDICES] = {\n";
+
+      loop(4)
+      {
+         genCmd("link_area2_"+areaNr+".cmd", cBase, DSP_AREA2_SEGSIZE);
+
+         genSec("AREA2_"+areaNr, cBase, DSP_AREA2_SEGSIZE);
+
+         /* Next area */
+         cBase += DSP_AREA2_SEGSIZE;
+         areaNr++;
+      }
+
+      genCmd("link_area3.cmd", cBase, DSP_AREA3_SIZE);
+
+      genSec("AREA3", cBase, DSP_AREA3_SIZE);
+      sec.append("};\n");
+
+      sec.saveLocal("overlay_sections.c");
+      trace "wrote \"overlay_sections.c\"";
+   }
+}
+
+Gen g;
+g.gen();

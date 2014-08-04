@@ -1,0 +1,189 @@
+/* ----
+ * ---- file   : main.c
+ * ---- author : Bastian Spiegel <bs@tkscript.de>
+ * ---- legal  : (c) 2013 by Bastian Spiegel.
+ * ----          Distributed under terms of the MIT LICENSE (MIT).
+ * ----
+ * ---- Permission is hereby granted, free of charge, to any person obtaining a copy
+ * ---- of this software and associated documentation files (the "Software"), to deal
+ * ---- in the Software without restriction, including without limitation the rights
+ * ---- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * ---- copies of the Software, and to permit persons to whom the Software is
+ * ---- furnished to do so, subject to the following conditions:
+ * ----
+ * ---- The above copyright notice and this permission notice shall be included in
+ * ---- all copies or substantial portions of the Software.
+ * ----
+ * ---- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * ---- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * ---- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * ---- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * ---- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * ---- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * ---- THE SOFTWARE.
+ * ----
+ * ---- info   : This is part of the "c64_tools" package examples.
+ * ----
+ * ---- changed: 06Sep2013, 08Sep2013, 14Sep2013, 15Sep2013, 19Sep2013, 21Sep2013, 02Oct2013
+ * ----          03Oct2013, 04Oct2013, 16Jan2014
+ * ----
+ * ----
+ */
+
+#include <std.h>
+#include <hwi.h>
+//#include <bcache.h>
+#include <c64.h>
+
+#include "../../include/types.h"
+#include "../../include/arch/dm3730/dm3730.h"
+
+#include <libc64_dsp/include/com.h>
+#include <libc64_dsp/include/mlb.h>
+
+#include "components.h"
+
+
+#define IVA2_XMC_L1DMPAA_BASE  (0x0184AE00u)
+
+
+extern void mlb_irq_handler(Void *arg);
+
+
+/* --------------------------------------------------------------------------- module vars */
+
+
+/* --------------------------------------------------------------------------- core_components_register() */
+sBool core_components_register(void) {
+   sBool ret = S_TRUE;
+
+   /*  This is called after mlb task has been started and DSP was not just released from suspend mode. */
+
+
+   /*
+    * (note) this is where firmware/resident components are registered.
+    *
+    * (note) as of 03Oct2013, the example components have been moved to
+    *         dynamically loaded DSP overlay images.
+    *
+    *
+    */
+      
+#if 0
+   /* Register the DSS driver component */
+   ret = ret && mlb_core_component_register(COMPONENT_DSS, &component_dss);
+   
+   /* Register the simple calculator component */
+   ret = ret && mlb_core_component_register(COMPONENT_DEMO_CALC, &component_demo_calc);
+   
+   /* Register the simple memory checksum component */
+   ret = ret && mlb_core_component_register(COMPONENT_DEMO_CHECKSUM, &component_demo_checksum);
+   
+   /* Register the simple fastcall calculator component */
+   ret = ret && mlb_core_component_register(COMPONENT_DEMO_CALC_FASTCALL, &component_demo_calc_fastcall);
+   
+   /* Register the julia attractor / fractal component */
+   ret = ret && mlb_core_component_register(COMPONENT_DEMO_FRACTAL, &component_demo_fractal);
+#endif
+
+   return ret;
+}
+
+
+/* --------------------------------------------------------------------------- main() */
+void main(void) {
+
+
+   /* Enable power-down during idle */
+   DSP_REG(IVA2_SYS_PDCCMD) |= (1u << 16);  /* set GEMPD bit */
+   
+#if 1
+   {
+      sUI i = 0;
+      
+      while(i < 1) // (note) crash when writing to all 32 regs (or even more than 2)
+      {
+         /* Unlock access to L1D memory */
+         DSP_REG(IVA2_XMC_L1DMPAA_BASE + (4u * i)) =
+            (1u <<  1) |  // User write access is permitted
+            (1u <<  2) |  // User read access is permitted
+            (1u <<  4) |  // Supervisor write access is permitted
+            (1u <<  5) |  // Supervisor read access is permitted
+            (1u <<  8) |  // Local (DSP) access is permitted
+            
+            (1u <<  9) |  // External access is permitted
+            (1u << 10) |  // ID0 has access permission
+            (1u << 11) |  // ID1 has access permission
+            (1u << 12) |  // ID2 has access permission
+            (1u << 13) |  // ID3 has access permission
+            (1u << 14) |  // ID4 has access permission
+            (1u << 15) |  // ID5 has access permission
+            
+            0          ;
+         
+         i++;
+      }
+   }
+#endif
+
+
+#if 1
+      //HWI_disable();
+      
+#if 1
+      /* Enable event source */
+      //////int_event_enable(IVA2_EVT_MAIL_U1_IRQ);
+      
+      DSP_REG(IVA2_WUGEN_MEVTSET0) = ~0u;
+      DSP_REG(IVA2_WUGEN_MEVTSET1) = ~0u;
+      DSP_REG(IVA2_WUGEN_MEVTSET2) = ~0u;
+
+      /* Unmask mailbox interrupt (IVA2_IRQ[10]) */
+      //HWI_enableWugen(10);
+      DSP_REG(IVA2_WUGEN_MEVTCLR0) = (1u << 10);
+
+#endif
+
+#if 1
+      /* Map MAIL_U1_IVA2_IRQ (55) to mailbox interrupt vector (10) */
+      HWI_eventMap(
+            MLB_INT_VEC_ID,
+            IVA2_EVT_MAIL_U1_IRQ
+            );
+#endif
+
+      /* Add interrupt handler to HWI dispatcher table */
+      HWI_dispatchPlug(
+            MLB_INT_VEC_ID,       // "vecid must be a valid interrupt ID in the range of 0-15."
+            (Fxn)mlb_irq_handler,
+            -1,                   // dma channel, -1 == use CPU copy
+            NULL                  // use default args
+            );
+
+
+#if 1
+
+      /* Setup mailbox 0 for receiving messages from the DSP to the GPP, and
+       *       mailbox 1 for sending messages to the GPP
+       */
+      DSP_REG(MLB_IRQENABLE_1) =
+            (
+               //(1u << 3) |  // Generate IRQ when msg was delivered to the GPP and FIFO slot becomes avail.
+               (1u << 0)    // set NEWMSGENABLEUUMB0 --> Generate IRQ when msg was received from the GPP
+             );
+
+      /* Enable mailbox interrupt */
+      C64_clearIFR(1 << MLB_INT_VEC_ID);
+      C64_enableIER(1 << MLB_INT_VEC_ID);
+
+      //HWI_enable();
+#endif
+
+#endif
+
+
+   /* Create/Start mailbox task */
+   mlb_start();
+
+   /* (note) DSPBIOS tasks will start up when main() returns */
+}

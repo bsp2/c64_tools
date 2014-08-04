@@ -1,0 +1,4 @@
+[...] 300 iterations in 5254 millisecs.
+
+
+[...] 300 iterations in 1393 millisecs.

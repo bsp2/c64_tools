@@ -1,0 +1,92 @@
+#
+# toplevel makefile for "c64_tools" package (GPP-side)
+#
+
+include install.mk
+include scp.mk
+
+DSPIMAGE=dsp/core/core.*
+
+
+# libc64
+.PHONY: libc64_clean
+libc64_clean:
+	$(MAKE) -C libc64 -f $(MAKEFILE) clean
+
+.PHONY: libc64_bin
+libc64_bin:
+	$(MAKE) -C libc64 -f $(MAKEFILE) bin
+
+
+# c64_load
+.PHONY: c64_load_clean
+c64_load_clean:
+	$(MAKE) -C c64_load -f $(MAKEFILE) clean
+
+.PHONY: c64_load_bin
+c64_load_bin: libc64_bin 
+	$(MAKE) -C c64_load -f $(MAKEFILE) bin
+
+
+# c64.ko
+.PHONY: kmod_clean
+kmod_clean:
+	$(MAKE) -C kmod -f Makefile clean
+
+.PHONY: kmod_bin
+kmod_bin: c64_load_bin 
+	$(MAKE) -C kmod -f Makefile bin
+
+
+# tests
+.PHONY: tests_clean
+tests_clean:
+	$(MAKE) -C tests -f $(MAKEFILE) clean
+
+.PHONY: tests_bin
+tests_bin:
+	$(MAKE) -C tests -f $(MAKEFILE) bin
+
+.PHONY: tests
+tests:
+	$(MAKE) -f $(MAKEFILE) tests_clean && $(MAKE) -f $(MAKEFILE) tests_bin
+
+
+# all
+.PHONY: clean
+clean: libc64_clean c64_load_clean kmod_clean tests_clean
+#	$(RM) kmod/c64.c
+
+.PHONY: bin
+bin: c64_load_bin kmod_bin tests_bin
+
+.PHONY: all
+all:
+	$(MAKE) -f $(MAKEFILE) all_clean && $(MAKE) -f $(MAKEFILE) all_bin
+
+
+# scp (copy to target)
+.PHONY: scp
+scp: bin
+	scp libc64/libc64.so libc64/libc64.so.1 c64_load/c64_load kmod/c64.ko scripts/go64.sh scripts/dsp_idle_test.sh scripts/hugetlb.sh scripts/stress_test.sh scripts/gfx_stress_test.sh scripts/dummy_load.sh $(SCP_USER)@$(SCP_HOST):$(SCP_PATH) 
+	$(MAKE) -C tests/ -f $(MAKEFILE) scp
+
+.PHONY: scp_libc64
+scp_libc64:
+	$(SCP) libc64/libc64.so libc64/libc64.so.1 $(SCP_USER)@$(SCP_HOST):$(SCP_PATH)
+
+.PHONY: scp_c64_load
+scp_c64_load:
+	$(SCP) c64_load/c64_load $(SCP_USER)@$(SCP_HOST):$(SCP_PATH)
+
+.PHONY: scp_kmod
+scp_kmod:
+	$(SCP) kmod/c64.ko $(SCP_USER)@$(SCP_HOST):$(SCP_PATH)
+
+.PHONY: scp_dspimage
+scp_dspimage:
+	$(SCP) $(DSPIMAGE) $(SCP_USER)@$(SCP_HOST):$(SCP_PATH)
+
+.PHONY: scp_go64
+scp_go64:
+	$(SCP) scripts/go64.sh $(SCP_USER)@$(SCP_HOST):$(SCP_PATH)

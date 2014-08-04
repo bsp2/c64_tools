@@ -1,0 +1,29 @@
+
+include ../install.mk
+
+
+TARGET=libc64.a64
+
+OBJ= \
+	src/int.o64 	\
+	src/mlb.o64 	\
+	src/int_c64.o64 \
+	src/dma.o64
+
+#OPTFLAGS+= $(OPTFLAGS_NONE_INTERLIST)
+#OPTFLAGS+= $(OPTFLAGS_SPEED)
+#OPTFLAGS+= $(OPTFLAGS_SPEED2)
+#OPTFLAGS+= $(OPTFLAGS_SIZE)
+OPTFLAGS+= $(OPTFLAGS_NONE)
+
+
+.PHONY: bin
+bin: $(TARGET)
+
+$(TARGET): $(OBJ)
+	$(RM) $(TARGET)
+	$(AR) r $(TARGET) $(OBJ)
+	@echo "library build finished at `$(DATE)`"
+
+
+include ../build.mk

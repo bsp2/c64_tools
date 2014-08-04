@@ -1,0 +1,101 @@
+pandora2:~/old$ ./c64_dsprite -l1sramr
+[...] starting SRAM read speed test
+[...] coff_load_overlay: text=0x000011c0  data=0x00000084  bss=0x00001110
+[...] DSPRITE_CMD_L1SRAM_R_SPEED took 1535 milliseconds (=>3053.746 MBytes/sec).
+
+  (note) blocksz=24 kB, 200000 iterations
+
+
+pandora2:~/old$ ./c64_dsprite -l1sramw
+[...] starting SRAM read speed test
+[...] coff_load_overlay: text=0x000011c0  data=0x00000084  bss=0x00001110
+[...] DSPRITE_CMD_L1SRAM_W_SPEED took 1535 milliseconds (=>3053.746 MBytes/sec).
+
+  (note) blocksz=24 kB, 200000 iterations
+
+
+pandora2:~/old$ ./c64_dsprite -l1sramrw
+[...] starting SRAM read/write speed test
+[...] coff_load_overlay: text=0x000011c0  data=0x00000084  bss=0x00001110
+[...] DSPRITE_CMD_L1SRAM_RW_SPEED took 1342 milliseconds (=>436.615 MBytes/sec).
+
+  (note) blocksz=12 kB, 50000 iterations
+
+
+pandora2:/home/bsp/old# ./c64_sramtest -l1sramr2w2
+[...] coff_load_overlay: text=0x00000e60  data=0x00000090  bss=0x00001110
+[...] starting L1 SRAM read2/write2 speed test
+[...] SRAMTEST_CMD_L1SRAM_R2W2_SPEED took 863 milliseconds (=>678.954 MBytes/sec).
+
+
+pandora2:/home/bsp/old# ./c64_sramtest -l1sramr4w4
+[...] coff_load_overlay: text=0x00000e60  data=0x00000090  bss=0x00001110
+[...] starting L1 SRAM read4/write4 speed test
+[...] SRAMTEST_CMD_L1SRAM_R4W4_SPEED took 576 milliseconds (=>1017.253 MBytes/sec).
+
+  (note) blocksz=12 kB, 50000 iterations
+
+
+pandora2:/home/bsp/old# ./c64_sramtest -l1sramr6w6 
+[...] coff_load_overlay: text=0x00000e60  data=0x00000090  bss=0x00001110
+[...] starting L1 SRAM read6/write6 speed test
+[...] SRAMTEST_CMD_L1SRAM_R6W6_SPEED took 545 milliseconds (=>1075.115 MBytes/sec).
+
+  (note) blocksz=12 kB, 50000 iterations
+
+
+pandora2:/home/bsp/old# ./c64_sramtest -l1sramr8w8 
+[...] coff_load_overlay: text=0x00000e60  data=0x00000090  bss=0x00001110
+[...] starting L1 SRAM read8/write8 speed test
+[...] SRAMTEST_CMD_L1SRAM_R8W8_SPEED took 503 milliseconds (=>1164.886 MBytes/sec).
+
+  (note) blocksz=12 kB, 50000 iterations
+
+
+pandora2:~/old$ ./c64_dsprite -l1sramrwram
+[...] starting SRAM-read / RAM-write speed test
+[...] coff_load_overlay: text=0x000011c0  data=0x00000084  bss=0x00001110
+[...] DSPRITE_CMD_L1SRAM_RWRAM_SPEED took 1725 milliseconds (=>407.609 MBytes/sec).
+
+  (note) blocksz=24 kB, 30000 iterations
+
+
+pandora2:~/old$ ./c64_dsprite -l1sramrwramdma
+[...] starting SRAM-read+write + parallel RAM-DMA-write speed test
+[...] coff_load_overlay: text=0x000011c0  data=0x00000084  bss=0x00001110
+[...] DSPRITE_CMD_L1SRAM_RWRAMDMA_SPEED took 1372 milliseconds (=>427.068 MBytes/sec).
+
+  (note) blocksz=6 kB, 100000 iterations
+
+
+pandora2:~/old$ ./c64_dsprite -l2sramr
+[...] starting L2 SRAM read speed test
+[...] coff_load_overlay: text=0x00001220  data=0x00000088  bss=0x00001110
+[...] DSPRITE_CMD_L2SRAM_R_SPEED took 1498 milliseconds (=>1877.503 MBytes/sec).
+
+  (note) blocksz=96 kB, 30000 iterations
+
+
+pandora2:~/old$ ./c64_dsprite -l2sramrw
+[...] starting L2 SRAM read/write speed test
+[...] coff_load_overlay: text=0x000012c0  data=0x0000008c  bss=0x00001110
+[...] DSPRITE_CMD_L2SRAM_RW_SPEED took 1694 milliseconds (=>193.698 MBytes/sec).
+
+  (note) blocksz=48 kB, 7000 iterations
+
+
+pandora2:~/old$ ./c64_dsprite -l2sramr1w2
+[...] starting SRAM read L1, write L2 speed test
+[...] coff_load_overlay: text=0x00001340  data=0x00000090  bss=0x00001110
+[...] DSPRITE_CMD_L2SRAM_R1_W2_SPEED took 1075 milliseconds (=>436.046 MBytes/sec).
+
+
+  (note) blocksz=48 kB, 10000 iterations
+
+
+pandora2:~/old$ ./c64_dsprite -l2sramr1w2ramdma
+[...] starting SRAM read L1, write L2 + RAM via DMA in parallel speed test
+[...] coff_load_overlay: text=0x00001440  data=0x00000094  bss=0x00001110
+[...] DSPRITE_CMD_L2SRAM_R1_W2RAMDMA_SPEED took 1083 milliseconds (=>432.826 MBytes/sec).
+
+  (note) blocksz=12 kB, 40000 iterations

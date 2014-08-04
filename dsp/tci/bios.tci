@@ -1,0 +1,55 @@
+
+bios.disableRealTimeAnalysis(prog);
+bios.disableRtdx(prog);
+
+bios.MEM.BIOSOBJSEG = comSeg;
+bios.MEM.BIOSSEG    = comSeg;
+bios.MEM.MALLOCSEG  = comSeg;
+bios.MEM.TEXTSEG    = comSeg;
+bios.MEM.SWITCHSEG  = comSeg;
+bios.MEM.BSSSEG     = comSeg;
+bios.MEM.FARSEG     = comSeg;
+bios.MEM.CINITSEG   = comSeg;
+bios.MEM.PINITSEG   = comSeg;
+bios.MEM.CONSTSEG   = comSeg;
+bios.MEM.DATASEG    = comSeg;
+bios.MEM.CIOSEG     = comSeg;
+bios.MEM.ARGSSEG    = comSeg;
+bios.MEM.STACKSEG   = comSeg;
+bios.MEM.GBLINITSEG = comSeg;
+bios.MEM.TRCDATASEG = comSeg;
+bios.MEM.SYSDATASEG = comSeg;
+bios.MEM.OBJSEG     = comSeg;
+bios.MEM.BIOSSEG    = comSeg;
+bios.MEM.SYSINITSEG = comSeg;
+bios.MEM.HWISEG     = comSeg;
+bios.MEM.HWIVECSEG  = comSeg;
+bios.MEM.RTDXTEXTSEG = comSeg;
+bios.BUF.OBJMEMSEG  = comSeg;
+bios.SYS.TRACESEG   = comSeg;
+bios.LOG.OBJMEMSEG  = comSeg;
+bios.STS.OBJMEMSEG  = comSeg;
+bios.SEM.OBJMEMSEG  = comSeg;
+bios.MBX.OBJMEMSEG  = comSeg;
+bios.QUE.OBJMEMSEG  = comSeg;
+bios.LCK.OBJMEMSEG  = comSeg;
+bios.CLK.OBJMEMSEG  = comSeg;
+bios.PRD.OBJMEMSEG  = comSeg;
+bios.SWI.OBJMEMSEG  = comSeg;
+bios.TSK.OBJMEMSEG  = comSeg;
+bios.PIP.OBJMEMSEG  = comSeg;
+bios.SIO.OBJMEMSEG  = comSeg;
+bios.RTDX.RTDXDATASEG = comSeg;
+bios.HST.OBJMEMSEG = comSeg;
+bios.DHL.OBJMEMSEG = comSeg;
+bios.DIO.OBJMEMSEG = comSeg;
+bios.IDL.OBJMEMSEG = comSeg;
+bios.RTDX.ENABLERTDX = 1;
+
+bios.LOG.instance("LOG_system").bufSeg = comSeg;
+bios.TSK.instance("TSK_idle").stackMemSeg = comSeg;
+
+
+bios.TSK.STACKSIZE = 0x10000;
+prog.module("MEM").ARGSSIZE = 500;
+bios.LOG.instance("trace").bufLen = 1024;

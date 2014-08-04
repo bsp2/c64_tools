@@ -1,0 +1,204 @@
+
+- include files shared by multiple projects are placed in "include/".
+- include files specific to a certain project are placed in the project folder.
+
+- source files shared by multiple projects are placed in "src/".
+- source files specific to a certain project are placed in the project folder.
+
+- each source file has a "standard" header that at least states the author(s) and the license.
+
+- source, header, and text files use unix line endings and ASCII encoding.
+
+- all file names are lower case. multiple words are separated by "_".
+
+- spaces, no tabs.
+
+- indent size is 3 (spaces!).
+
+- the number of chars per source line should not exceed 100
+
+- the types declared in "types.h" are used instead of the native C types (int/short/..).
+   the only exception is "char", if the type is used for actual strings.
+
+- all source files are compiled with -Wall and should not generate any warnings when they are built.
+
+- C99 style variable declarations must not be used, e.g.
+  for(int i=0; i<10; i++) // <--- no
+
+- GCC specific extensions should be avoided, if possible. e.g.
+  void my_function(sSI _numElements) {
+    sU8 myArray[_numElements]; // <--- no
+  }
+
+- assembly code should be placed in *.s files, if possible
+
+- in source files that target Linux (where a modern GCC is available), named structure initializers are recommended (if useful), e.g.
+  my_config_t config = {
+    .some_bool_option  = S_FALSE,
+    .other_int_option  = 0
+  };
+
+- each include file is enclosed in an #ifdef __cplusplus block. the "cplusplus_begin.h" and "cplusplus_end.h" are used for this.
+
+- include files should not include other include files. the only exception are "include helper" files, whose file name must be prefixed
+   with "inc_". include helper files may only include files, not define constants, declare functions or types, etc.
+
+- include files located in the current directory (i.e. the same as the source file that includes the header file) are included like this:
+  #include "my_header.h"
+
+- include files located in other directories are included like this:
+  #include <other_header.h>
+
+- comments should be enclosed in /**/ (classic C style) but // (modern C/C++ style) may be used, too (should be avoided, though).
+
+- logical paragraphs (e.g. function implementations) are separated by two empty lines
+
+- keywords, operators, constant, variable, function names (in expression) are separated by a single space, except
+   for
+     - the first character after an opening bracket (, e.g.
+        my_var = (i + 2);
+
+       instead of e.g.
+        my_var=i+2 ;
+
+     - the opening bracket [ after an array variable name, e.g.
+        sU8 myArray[32];
+
+- constant and macro names are always upper case, e.g.
+  #define MY_CONSTANT  (42u)
+
+- function or global variable names are always lower case. multiple words are separated by "_".
+
+- local variable names and function parameters use "camel case", e.g.
+   void my_function(void) {
+      sSI myIntVar;
+   }
+
+- no more than one variable is declared by source line, e.g.
+   sSI a;
+   sSI b;
+   sSI c;
+
+   instead of e.g.
+   sSI a,b,c;
+
+- constants defined in macros are enclosed in () brackets (see above)
+
+- unsigned constants use the 'u' postfix (see above)
+
+- parameters in macros are always enclosed in () brackets, e.g.
+  #define F2X(v)  ((sFix) ((v) * 65536.0f))
+
+- all control blocks are enclosed in {}.
+
+- all control blocks are separated by a single empty line from the previous statement or variable declaration, e.g.
+   sSI i;
+
+   for(i=0; i<10; i++)
+   {
+   }
+
+- all return statements are separated by a single empty line from the previous statement
+
+- all switch blocks have a default case.
+
+- the opening curly brace for control blocks (if,while,do,switch,for) is placed on the next line, horizontally aligned with the keyword, i.e.
+   if(i > 0)
+   {
+      /* do something */
+   }
+
+- closing curly braces } are always horizontally aligned to the opening curly brace
+
+- the opening bracket ( for control blocks directly follows the keyword (see above).
+
+- the number of lines of source code for a function implementation should not exceed a screen page {~100 lines)
+
+- function prototypes (defined in header files) use a single space between the function name and the opening bracket ( of the formal argument list, i.e.
+   void some_function (void);
+
+- function implementations do not have a space between the function name and the opening bracket ( of the formal argument list, i.e.
+   void some_function(void) {
+      /* do something */
+   }
+
+- static functions that are local to a specific source module should be prefixed with "loc_", e.g.
+   static loc_helper_function(void) {
+   }
+
+- function parameter names of the function declaration and the implementation must match
+
+- function parameter names should be prefixed with "_"
+
+- "OUT" type function parameters are prefixed with "_ret", e.g.
+   my_error_t my_function(sSI _someInputVar, sSI *_retSomeOutputVar)
+   {
+      *_retSomeOutputVar = _someInputVar; /* yep, pretty useless */
+
+      return MY_ERR_OK;
+   }
+
+- functions should have no more than one return statement
+
+- if the return value of a function call is unused, it is cast to void, e.g.
+   (void)my_function_which_has_a_nonvoid_return_value();
+
+- unused local variables should be removed or at least cast to void while the function is still a stub, e.g.
+   void my_function(sSI _someInt) {
+     (void)_someInt;
+   }
+
+- variables local to a specific source module should be prefix with "loc_"
+
+- the opening curly brace { for a function is placed on the same source line as the closing bracket ) of the function argument list.
+
+- expressions, like (i + j), should always be enclosed in () brackets.
+
+- expressions (not sexpr) in relational expressions is always be enclosed in () bracket, i.e.
+   ( (a + b) == (c + d) )
+
+- in == comparisons with a constant, the constant comes first, i.e.
+   if(42 == i)
+   {
+   }
+
+- integers in conditional expressions are always compared to a constant, i.e.
+   if(i > 0)
+   {
+   }
+
+   instead of e.g.
+   if(i){}
+
+- when testing for null pointers, the NULL constant is used, e.g.
+   if(NULL != ptr)
+   {
+   }
+
+   instead of
+   if(!ptr){}
+
+- although "C" has no boolean type, variables that use the sBool type do not have be compared to constants (S_TRUE, S_FALSE), e.g.
+   if(my_bool)
+   {
+   }
+
+   although this would be MISRA clean:
+   if(S_TRUE == my_bool)
+   {
+   }
+
+- TODOs in comments are prefixed with "(todo) "
+
+- temporary hacks are prefixed with "xxx ", e.g.
+    /* xxx set XYZ register value, should be moved to arch dependent source later on */
+
+- log output should be prefixed with
+   "[...] " -- info
+   "[dbg] " -- debug
+   "[trc] " -- debug galore
+   "[~~~] " -- warning
+   "[---] " -- error
+   "[!!!] " -- totally unexpected error (rarely used)
+
+- if unsure, take a look at the existing source code, unless it's not a good example and breaks this ruleset.
