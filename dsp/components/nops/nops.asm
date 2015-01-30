@@ -1,6 +1,6 @@
 ;******************************************************************************
 ;* TMS320C6x C/C++ Codegen                                        Unix v7.4.5 *
-;* Date/Time created: Fri Jan 17 15:11:50 2014                                *
+;* Date/Time created: Fri Jan 30 12:46:33 2015                                *
 ;******************************************************************************
 	.compiler_opts --abi=coffabi --c64p_l1d_workaround=default --endian=little --hll_source=on --long_precision_bits=40 --mem_model:code=near --mem_model:const=far --mem_model:data=far --object_format=coff --silicon_version=6500 --symdebug:none 
 
@@ -25,7 +25,7 @@
 	.asg	B15, SP
 	.global	$bss
 
-;	opt6x /tmp/13991HAzwto /tmp/13991jNAs6Q 
+;	opt6x /tmp/03521eyL2Xb /tmp/03521kNdWzf 
 	.sect	".text"
 	.clink
 	.global	_nops

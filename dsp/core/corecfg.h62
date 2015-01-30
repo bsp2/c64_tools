@@ -107,8 +107,8 @@ GBL_L1DMODE         .set 07H
 GBL_L2MODE          .set 00H
 GBL_L2MAR0_31       .set 00H
 GBL_L2MAR32_63      .set 00H
-GBL_L2MAR64_95      .set 0ffffffffH
-GBL_L2MAR96_127     .set 0ffffffffH
+GBL_L2MAR64_95      .set 00H
+GBL_L2MAR96_127     .set 00H
 GBL_L2MAR128_159    .set 0ffffffffH
 GBL_L2MAR160_191    .set 00H
 GBL_L2MAR192_223    .set 00H

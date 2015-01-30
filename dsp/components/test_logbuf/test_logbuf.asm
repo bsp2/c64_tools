@@ -1,6 +1,6 @@
 ;******************************************************************************
 ;* TMS320C6x C/C++ Codegen                                        Unix v7.4.5 *
-;* Date/Time created: Fri Jan 17 15:11:49 2014                                *
+;* Date/Time created: Fri Jan 30 12:46:33 2015                                *
 ;******************************************************************************
 	.compiler_opts --abi=coffabi --c64p_l1d_workaround=default --endian=little --hll_source=on --long_precision_bits=40 --mem_model:code=near --mem_model:const=far --mem_model:data=far --object_format=coff --silicon_version=6500 --symdebug:none 
 
@@ -70,7 +70,7 @@ _cnt_i:	.usect	".far",4,4
 _cnt_f:	.usect	".far",4,4
 	.global	_component_test_logbuf
 _component_test_logbuf:	.usect	".sec_com",52,4
-;	opt6x /tmp/13929k7giVM /tmp/13929eWuUr2 
+;	opt6x /tmp/03459cg37dq /tmp/03459Mee8lW 
 	.sect	".text"
 	.clink
 

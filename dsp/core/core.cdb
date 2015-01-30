@@ -111,7 +111,7 @@ type GlobalStatus {
         prop Visible :: 0
         prop Writable :: 1
     }
-    global DATE :: "Thu Nov 14 20:15:09 2013" { 
+    global DATE :: "Fri Jan 30 12:42:04 2015" { 
         prop Type :: "{21455EA3-B96A-11cf-9BFE-0000C0AC14C7}"
         prop Visible :: 0
         prop Writable :: 0
@@ -1188,7 +1188,7 @@ type GBL {
         prop NoGen :: 0
         prop TabName :: "64PLUS"
     }
-    global L2MAR64_95 :: -1 { 
+    global L2MAR64_95 :: 0 { 
         prop Type :: "{3EE4CB80-E273-11d0-BB8F-0000C008F2E9}"
         prop Label :: "MAR 64-95 - bitmask"
         prop JSName :: "C64PLUSMAR64to95"
@@ -1199,7 +1199,7 @@ type GBL {
         prop NoGen :: 0
         prop TabName :: "64PLUS"
     }
-    global L2MAR96_127 :: -1 { 
+    global L2MAR96_127 :: 0 { 
         prop Type :: "{3EE4CB80-E273-11d0-BB8F-0000C008F2E9}"
         prop Label :: "MAR 96-127 - bitmask"
         prop JSName :: "C64PLUSMAR96to127"

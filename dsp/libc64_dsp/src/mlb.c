@@ -1,7 +1,7 @@
 /* ----
  * ---- file   : mlb.c
  * ---- author : Bastian Spiegel <bs@tkscript.de>
- * ---- legal  : (c) 2013 by Bastian Spiegel.
+ * ---- legal  : (c) 2013-2015 by Bastian Spiegel.
  * ----          Distributed under terms of the MIT LICENSE (MIT).
  * ----
  * ---- Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,7 +27,7 @@
  * ---- changed: 10Sep2013, 11Sep2013, 12Sep2013, 13Sep2013, 14Sep2013, 15Sep2013, 17Sep2013
  * ----          19Sep2013, 20Sep2013, 27Sep2013, 02Oct2013, 03Oct2013, 04Oct2013, 05Oct2013
  * ----          13Oct2013, 20Oct2013, 21Oct2013, 23Oct2013, 24Nov2013, 11Dec2013, 13Dec2013
- * ----          15Dec2013, 16Jan2014
+ * ----          15Dec2013, 16Jan2014, 30Jan2015
  * ----
  * ----
  */
@@ -818,7 +818,8 @@ void mlb_irq_handler(void *_arg) {
       //SEM_post(mlb_sem_handle);
       
       /* now this is ugly but w/o it, the ARM will not receive interrupts or the entire system will freeze (why??) */
-      BCACHE_wbInvAll();
+      /*  ==> fixed on 30Jan2015 (call removed). required correct MAR config (MAR cache bits 64..95 have to be 0. d'oh!) */
+      /* BCACHE_wbInvAll(); */
       
       num_irqs++;
    }

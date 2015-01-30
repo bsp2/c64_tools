@@ -48,10 +48,13 @@ prog.module("GBL").C64PLUSL1DCFG      = "32k" ;
 //prog.module("GBL").C64PLUSL1DCFG      = "16k" ;
 //prog.module("GBL").C64PLUSL1DCFG      = "0k" ; // debug, should be 23k
 
-prog.module("GBL").C64PLUSMAR64to95   = 0x00000003;
-prog.module("GBL").C64PLUSMAR96to127  = 0x00000003;
-bios.GBL.C64PLUSMAR64to95 = 0xffffffff;
-bios.GBL.C64PLUSMAR96to127 = 0xffffffff;
+//prog.module("GBL").C64PLUSMAR64to95   = 0x00000003;
+//prog.module("GBL").C64PLUSMAR96to127  = 0x00000003;
+// bios.GBL.C64PLUSMAR64to95 = 0xffffffff;
+// bios.GBL.C64PLUSMAR96to127 = 0xffffffff;
+// bios.GBL.C64PLUSMAR128to159 = 0xffffffff;
+bios.GBL.C64PLUSMAR64to95 = 0x00000000;
+bios.GBL.C64PLUSMAR96to127 = 0x00000000;
 bios.GBL.C64PLUSMAR128to159 = 0xffffffff;
 
 

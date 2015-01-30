@@ -5,7 +5,7 @@
 ;; INPUT core.cdb
 
 ;; CONFIGURATION/VERSION INFORMATION
-	.asg "Thu Nov 14 20:15:09 2013", VERS$DATE
+	.asg "Fri Jan 30 12:42:04 2015", VERS$DATE
 
 ;; PROLOGUE
 	.include corecfg.h62
@@ -370,8 +370,8 @@ HOOK$SETOF          .set 00H
 	.asg 00H, _L2MODE
 	.asg 00H, _L2MAR0_31
 	.asg 00H, _L2MAR32_63
-	.asg 0ffffffffH, _L2MAR64_95
-	.asg 0ffffffffH, _L2MAR96_127
+	.asg 00H, _L2MAR64_95
+	.asg 00H, _L2MAR96_127
 	.asg 0ffffffffH, _L2MAR128_159
 	.asg 00H, _L2MAR160_191
 	.asg 00H, _L2MAR192_223

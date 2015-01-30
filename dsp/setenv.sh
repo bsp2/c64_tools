@@ -8,15 +8,15 @@ export TI_ROOT=${HOME}/ti
 export TI_CGTOOLS="${TI_ROOT}/TI_CGT_C6000_7.4.5"
 
 # where the DSP/BIOS 5.xx includes/libs are installed
-#export TI_DSPBIOS="${TI_ROOT}/bios_5_42_01_09"
+export TI_DSPBIOS="${TI_ROOT}/bios_5_42_01_09"
 #export TI_DSPBIOS="${TI_ROOT}/bios_5_40_03_23"
 #export TI_DSPBIOS="${TI_ROOT}/bios_5_41_10_36"
-export TI_DSPBIOS="${TI_ROOT}/bios_5_41_04_18"
+#export TI_DSPBIOS="${TI_ROOT}/bios_5_41_04_18"
 #export TI_DSPBIOS="${TI_ROOT}/bios_5_33_06"
 
 # where the XDCTOOLS (tconf, ..) are installed
-#export TI_XDCTOOLS="${TI_DSPBIOS}/xdctools"
-export TI_XDCTOOLS="${TI_ROOT}/xdctools_3_25_03_72"
+export TI_XDCTOOLS="${TI_DSPBIOS}/xdctools"
+#export TI_XDCTOOLS="${TI_ROOT}/xdctools_3_25_03_72"
 
 
 # where fastRTS (FPU emu.) includes/libs are installed

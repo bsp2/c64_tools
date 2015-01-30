@@ -105,7 +105,7 @@ static void loc_link1d(test_qdma_cmd_link1d_args_t *_args) {
                            );
    }
 
-   syscalls.qdma_wait(QDMA_0);
+   syscalls.qdma_wait(QDMA_1);
 }
 
 
@@ -152,7 +152,7 @@ static void loc_link2d(test_qdma_cmd_link2d_args_t *_args) {
                            );
    }
 
-   syscalls.qdma_wait(QDMA_0);
+   syscalls.qdma_wait(QDMA_1);
 }
 
 

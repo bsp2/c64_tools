@@ -1,0 +1,30 @@
+pandora2:/home/bsp/old# ./c64_tc 3
+[...] selected testcase 3 ("TC_RPC_ADD_BENCHMARK")
+[...] coff_load_overlay: text=0x000005a0  data=0x0000006c  bss=0x00001118
+[...] coff_load_overlay: text=0x00000be0  data=0x00000090  bss=0x0000111c
+[...] coff_load_overlay: text=0x00000600  data=0x00000074  bss=0x00001118
+[...] starting benchmark
+[...] benchmark finished. => 100000 iterations in 1173 millisecs.
+[...] test_cycle_idx=0, test_case_idx=3 ("TC_RPC_ADD_BENCHMARK") OK.
+
+==> 0.01173 millseconds per remote procedure call (roundtrip) 
+ ==> ~85251 calls per second (2.428 times faster than 06Nov2013 release)
+       ==> speed increased since BCACHE_wbInvAll() call was finally removed from MLB int handler
+            turned out that the MLB regs were cached in previous releases! (MAR bits 64to95 were 0xFFFFffff instead of 0!)
+
+
+pandora2:/home/bsp/old# ./c64_tc 6
+[...] selected testcase 6 ("TC_FASTCALL_RPC_ADD")
+[...] coff_load_overlay: text=0x000005a0  data=0x0000006c  bss=0x00001118
+[...] coff_load_overlay: text=0x00000be0  data=0x00000090  bss=0x0000111c
+[...] coff_load_overlay: text=0x00000600  data=0x00000074  bss=0x00001118
+[...] starting fastcall benchmark
+[...] loc_tc_rpc_add_fastcall_benchmark: init rpc sent, r=0
+[...] fastcall benchmark finished. => 1000000 iterations in 1615 millisecs.
+[...] test_cycle_idx=0, test_case_idx=6 ("TC_FASTCALL_RPC_ADD") OK.
+
+  ==> same speed as 06Nov2013 release
+
+pandora2:/home/bsp/old# cat /proc/pandora/dsp_mhz_max 
+800
+
