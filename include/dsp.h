@@ -107,6 +107,20 @@ S_EXTERN dsp_mem_region_t dsp_shm_alloc (dsp_cache_t _type, sU32 _numBytes);
 
 
 /*
+ * Allocate GPP<>DSP shared memory and return physical+virtual addresses and size.
+ * This is identical to dsp_shm_alloc(), but allows to specify desired GPP virtual address.
+ *
+ *  (note) if desired GPP virtual address range is not available, the function may still succeed and
+ *          return different address. It is the caller's responsibility to ensure the virtual address
+ *          returned is suitable for it's needs.
+ *
+ *  The 'size' field of the returned struct is >=_numBytes on success, or 0 if the allocation failed.
+ *
+ */
+S_EXTERN dsp_mem_region_t dsp_shm_alloc_at (dsp_cache_t _type, sU32 _numBytes, void *addr);
+
+
+/*
  * Free GPP<>DSP shared memory.
  *
  *  (note) applications must ensure that this memory is not in use anymore.

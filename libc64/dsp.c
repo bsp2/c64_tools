@@ -800,8 +800,8 @@ void dsp_close(void) {
 }
 
 
-/*--------------------------------------------------------------------------- dsp_shm_alloc() */
-dsp_mem_region_t dsp_shm_alloc(dsp_cache_t _type, sU32 _numBytes) {
+/*--------------------------------------------------------------------------- dsp_shm_alloc_at() */
+dsp_mem_region_t dsp_shm_alloc_at(dsp_cache_t _type, sU32 _numBytes, void *addr) {
    dsp_mem_region_t ret = {0, 0, 0};
    int r;
 
@@ -836,7 +836,7 @@ dsp_mem_region_t dsp_shm_alloc(dsp_cache_t _type, sU32 _numBytes) {
             }
 
             /* Map/allocate hugetlb shared memory (not done via c64.ko ATM) */
-            allocReq->mem.virt_addr = (sU32) mmap(0, /* addr */
+            allocReq->mem.virt_addr = (sU32) mmap(addr,
                                                   allocReq->mem.size,
                                                   (PROT_READ | PROT_WRITE),
                                                   (MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB),
@@ -887,7 +887,7 @@ dsp_mem_region_t dsp_shm_alloc(dsp_cache_t _type, sU32 _numBytes) {
                if(DSP_CACHE_HUGETLB != _type)
                {
                   /* Map shared memory (allocated in kernel space) to user space */
-                  allocReq->mem.virt_addr = (sU32) mmap(0,  /* addr */
+                  allocReq->mem.virt_addr = (sU32) mmap(addr,
                                                         allocReq->mem.size,
                                                         (PROT_READ | PROT_WRITE),
                                                         MAP_SHARED,
@@ -1012,6 +1012,11 @@ dsp_mem_region_t dsp_shm_alloc(dsp_cache_t _type, sU32 _numBytes) {
    return ret;
 }
 
+
+/*--------------------------------------------------------------------------- dsp_shm_alloc() */
+dsp_mem_region_t dsp_shm_alloc(dsp_cache_t _type, sU32 _numBytes) {
+   return dsp_shm_alloc_at(_type, _numBytes, NULL);
+}
 
 /*--------------------------------------------------------------------------- dsp_shm_free() */
 int dsp_shm_free(dsp_mem_region_t _mem) {
