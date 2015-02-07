@@ -673,6 +673,33 @@ static long loc_shm_free(dev_client_t *_client, dsp_cache_t _type) {
 }
 
 
+/*---------------------------------------------------------------- loc_shm_map_to_userspace() */
+static int loc_shm_map_to_userspace(struct vm_area_struct *_vma, unsigned long _size) {
+   int ret;
+
+   /* Remap kernel memory to userspace
+    * (note) _vma->vm_flags are set by remap_pfn_range() itself */
+   ret = remap_pfn_range(_vma,
+                         _vma->vm_start,
+                         _vma->vm_pgoff,
+                         _size,
+                         _vma->vm_page_prot
+                         );
+   if(0 == ret)
+   {
+      /* VM_IO: I/O memory, like hardware registers, reads may have side effects
+       *        (VM_IO is set by remap_pfn_range(), it's up to the caller to clear it)
+       * VM_DONTEXPAND: don't automatically expand (with mremap()), must call mmap() instead
+       *        our shm is just RAM, so to allow kernel/debuggers to read this memory, clear VM_IO
+       */
+      _vma->vm_flags &= ~VM_IO;
+      _vma->vm_flags |= VM_DONTEXPAND;
+   }
+
+   return ret;
+}
+
+
 /*--------------------------------------------------------------------------- FOPS module vars */
 static int     fops__open     (struct inode *_inode, struct file *_filep);
 static int     fops__release  (struct inode *_inode, struct file *_filep);
@@ -2473,16 +2500,7 @@ static int fops__mmap(struct file *_filep, struct vm_area_struct *_vma) {
                      printk(KERN_DEBUG "c64::dev::mmap: shm NEW vm_page_prot=0x%08x\n", _vma->vm_page_prot);
                   }
               
-                  _vma->vm_flags |= (VM_RESERVED | VM_IO);
-
-                  /* Remap kernel memory to userspace */
-                  ret = remap_pfn_range(_vma,
-                                        _vma->vm_start,
-                                        _vma->vm_pgoff,
-                                        cl->shm[type].dsp.size,
-                                        _vma->vm_page_prot
-                                        );
-
+                  ret = loc_shm_map_to_userspace(_vma, cl->shm[type].dsp.size);
                   if(0 == ret)
                   {
                      cl->shm[type].dsp.virt_addr = (sU32)_vma->vm_start;
@@ -2559,15 +2577,7 @@ static int fops__mmap(struct file *_filep, struct vm_area_struct *_vma) {
                   /* Map uncached memory */
                   _vma->vm_page_prot = pgprot_stronglyordered(_vma->vm_page_prot);
                
-                  _vma->vm_flags |= (VM_RESERVED | VM_IO);
-               
-                  /* Remap kernel memory to userspace */
-                  ret = remap_pfn_range(_vma,
-                                        _vma->vm_start,
-                                        _vma->vm_pgoff,
-                                        DSP_L1SRAM_FSHM_SIZE,
-                                        _vma->vm_page_prot
-                                        );
+                  ret = loc_shm_map_to_userspace(_vma, DSP_L1SRAM_FSHM_SIZE);
                   if(0 == ret)
                   {
                      cl->l1sram_fshm.phys_addr = (sU32)reqPhysAddr;
@@ -2634,16 +2644,8 @@ static int fops__mmap(struct file *_filep, struct vm_area_struct *_vma) {
                   /* Map uncached memory */
 
                   _vma->vm_page_prot = pgprot_stronglyordered(_vma->vm_page_prot);
-               
-                  _vma->vm_flags |= (VM_RESERVED | VM_IO);
-               
-                  /* Remap kernel memory to userspace */
-                  ret = remap_pfn_range(_vma,
-                                        _vma->vm_start,
-                                        _vma->vm_pgoff,
-                                        DSP_L2SRAM_FSHM_SIZE,
-                                        _vma->vm_page_prot
-                                        );
+
+                  ret = loc_shm_map_to_userspace(_vma, DSP_L2SRAM_FSHM_SIZE);
                   if(0 == ret)
                   {
                      cl->l2sram_fshm.phys_addr = (sU32)reqPhysAddr;
